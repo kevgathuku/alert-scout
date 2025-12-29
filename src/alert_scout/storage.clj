@@ -1,6 +1,7 @@
 (ns alert-scout.storage
   (:require [clojure.edn :as edn]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [alert-scout.schemas :as schemas]))
 
 
 (defn load-edn [path]
@@ -34,22 +35,32 @@
 ;; --- Feed management ---
 
 (defn load-feeds
-  "Load feeds from an EDN file. Returns a vector of feed maps with :feed-id and :url."
+  "Load feeds from an EDN file. Returns a vector of feed maps with :feed-id and :url.
+   Validates feeds against schema and throws on invalid data."
   [path]
-  (or (load-edn path) []))
+  (let [feeds (or (load-edn path) [])]
+    (try
+      (schemas/validate-feeds feeds)
+      (catch Exception e
+        (throw (ex-info (str "Invalid feeds in " path)
+                        {:path path
+                         :errors (:errors (ex-data e))}
+                        e))))))
 
 
 (defn save-feeds!
-  "Save feeds to an EDN file."
+  "Save feeds to an EDN file. Validates before saving."
   [path feeds]
+  (schemas/validate-feeds feeds)
   (save-edn! path feeds))
 
 
 (defn add-feed!
-  "Add a new feed to the feeds file. Returns the updated feeds vector."
+  "Add a new feed to the feeds file. Returns the updated feeds vector.
+   Validates the new feed before adding."
   [path feed-id url]
   (let [feeds (load-feeds path)
-        new-feed {:feed-id feed-id :url url}
+        new-feed (schemas/validate schemas/Feed {:feed-id feed-id :url url})
         updated-feeds (conj feeds new-feed)]
     (save-feeds! path updated-feeds)
     updated-feeds))

@@ -36,6 +36,11 @@ lein run
 ;; Save alerts to file
 (def result (core/run-once))
 (core/save-alerts! (:alerts result) "reports/alerts.md" :markdown)
+
+;; Validate data structures (useful during development)
+(require '[alert-scout.schemas :as schemas])
+(schemas/valid? schemas/Feed {:feed-id "hn" :url "https://news.ycombinator.com/rss"})
+(schemas/explain schemas/Feed {:feed-id ""})  ;; See why data is invalid
 ```
 
 ### Building
@@ -66,8 +71,15 @@ The application follows a pipeline architecture with clear separation of concern
    - Handles EDN file I/O for users, rules, feeds, and checkpoints
    - Maintains in-memory checkpoint state using atoms
    - Provides CRUD operations for feed management
+   - Validates data against schemas when loading/saving
 
-4. **Core** (`alert-scout.core`) - Main orchestration and presentation
+4. **Schemas** (`alert-scout.schemas`) - Data validation using Malli
+   - Defines schemas for all domain objects (Feed, Rule, User, FeedItem, Alert)
+   - Provides validation functions with clear error messages
+   - Protects against invalid data at system boundaries
+   - See `doc/malli-examples.md` for detailed examples
+
+5. **Core** (`alert-scout.core`) - Main orchestration and presentation
    - Loads configuration from `data/` directory on namespace load
    - Coordinates fetching, matching, and alert emission
    - Provides colorized terminal output using ANSI codes
@@ -161,6 +173,34 @@ Feeds may return items with `nil` dates or missing fields. Always handle:
 - Missing `:published-at` with `when-let` guards
 - Ensure Date comparisons have both operands non-nil
 
+### Schema Validation with Malli
+
+This project uses [Malli](https://github.com/metosin/malli) for runtime data validation:
+
+- **Validate at boundaries**: Data is validated when loading from files or external sources
+- **Clear error messages**: Invalid data produces human-readable error explanations
+- **Fail fast**: Better to fail on startup than corrupt data or crash later
+- **Optional validation**: Can be disabled in tight loops for performance
+
+Examples:
+```clojure
+;; Validate individual values
+(schemas/validate schemas/Feed {:feed-id "hn" :url "..."})
+
+;; Get validation errors
+(schemas/explain schemas/Rule invalid-rule)
+;=> {:user-id ["should be a string"]}
+
+;; Storage layer validates automatically
+(storage/add-feed! "data/feeds.edn" "" "")  ;; Throws validation error
+
+;; Generate test data
+(require '[malli.generator :as mg])
+(mg/generate schemas/Feed)
+```
+
+See `doc/malli-examples.md` for comprehensive examples and benefits.
+
 ### REPL-Driven Development
 
 This project is designed for REPL-driven development:
@@ -176,7 +216,8 @@ src/
     core.clj           # Orchestration, formatting, exports
     fetcher.clj        # RSS/Atom feed fetching
     matcher.clj        # Rule matching engine
-    storage.clj        # Data persistence
+    storage.clj        # Data persistence with validation
+    schemas.clj        # Malli schemas for domain objects
   my-stuff/            # Legacy/scratch namespace
     core.clj           # Not actively used
 
@@ -185,4 +226,7 @@ data/                  # Configuration and state (EDN files)
   rules.edn           # Alert rules
   users.edn           # User definitions
   checkpoints.edn     # Last-seen timestamps (auto-managed)
+
+doc/                   # Documentation
+  malli-examples.md   # Comprehensive Malli usage examples
 ```
