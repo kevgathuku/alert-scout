@@ -1,0 +1,3 @@
+[{:feed-id "hn" :url "https://news.ycombinator.com/rss"}
+ {:feed-id "hn-frontpage" :url "https://hnrss.org/frontpage"}
+ {:feed-id "blog" :url "https://kevgathuku.dev/rss.xml"}]

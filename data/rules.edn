@@ -28,6 +28,6 @@
  {:id "rule-ai"
   :user-id "admin"
   :must ["ai"]
-  :should []
+  :should ["llm"]
   :must-not ["crypto"]}]
 
