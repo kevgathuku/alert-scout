@@ -1,0 +1,41 @@
+name: Quick Check
+
+# Run on every push for fast feedback
+on:
+  push:
+    branches: [ '**' ]
+
+jobs:
+  quick-test:
+    name: Quick validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'leiningen'
+
+    - name: Install Leiningen
+      run: |
+        curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > lein
+        chmod +x lein
+        sudo mv lein /usr/local/bin/
+
+    - name: Run fast checks
+      run: |
+        echo "Installing dependencies..."
+        lein deps
+
+        echo "Running tests..."
+        lein test
+
+        echo "Checking for reflection warnings..."
+        lein check
+
+        echo "✓ All checks passed!"

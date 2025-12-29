@@ -61,6 +61,29 @@ lein uberjar
 java -jar target/uberjar/my-stuff-0.1.0-SNAPSHOT-standalone.jar
 ```
 
+### Continuous Integration
+
+The project uses GitHub Actions for CI/CD with two workflows:
+
+**Main CI Pipeline** (`.github/workflows/ci.yml`):
+- Runs on push to main/master branches and pull requests
+- Tests against multiple JDK versions (11, 17, 21)
+- Runs all tests
+- Checks for reflection warnings
+- Builds uberjar artifact
+- Uploads build artifacts (retained for 7 days)
+
+**Quick Check** (`.github/workflows/quick-check.yml`):
+- Runs on every push to any branch
+- Fast feedback for development
+- Single JDK version (17)
+- Runs tests and compilation checks
+
+Both workflows:
+- Cache Leiningen dependencies for faster builds
+- Fail if reflection warnings are detected
+- Validate data schemas during tests
+
 ## Architecture
 
 ### Core Components
