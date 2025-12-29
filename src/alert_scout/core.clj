@@ -104,8 +104,7 @@
      ;; Perform side effects after data processing
      (doseq [{:keys [feed-id url alerts latest-item]} results]
        (println (colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
-       (doseq [alert alerts]
-         (emit-alert alert))
+       (run! emit-alert alerts)
        (when latest-item
          (storage/update-checkpoint! feed-id (:published-at latest-item) "data/checkpoints.edn")))
 
