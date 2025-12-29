@@ -17,6 +17,15 @@ lein repl
 lein compile
 lein check
 
+# Run all tests
+lein test
+
+# Run specific test namespace
+lein test alert-scout.matcher-test
+
+# Run specific test
+lein test :only alert-scout.matcher-test/test-match-rule-must
+
 # Run the application
 lein run
 ```

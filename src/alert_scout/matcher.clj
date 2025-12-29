@@ -10,7 +10,7 @@
 
 
 (defn contains-term? [text term]
-  (str/includes? text (str/lower-case term)))
+  (str/includes? (str/lower-case text) (str/lower-case term)))
 
 
 (defn match-rule?

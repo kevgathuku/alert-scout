@@ -2,6 +2,4 @@
   (:require [clojure.test :refer :all]
             [my-stuff.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+;; This is a legacy namespace - tests moved to alert-scout.* namespaces
