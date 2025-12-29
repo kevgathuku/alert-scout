@@ -1,7 +1,8 @@
 (ns alert-scout.fetcher
   (:import
    (java.net URL)
-   (com.rometools.rome.io SyndFeedInput XmlReader)))
+   (com.rometools.rome.io SyndFeedInput XmlReader)
+   (com.rometools.rome.feed.synd SyndFeed SyndEntry SyndContent SyndCategory)))
 
 (defn fetch-feed
   "Fetch RSS/Atom feed and return SyndFeed."
@@ -12,20 +13,23 @@
 
 (defn entry->item
   "Normalize feed entry to a Clojure map."
-  [^com.rometools.rome.feed.synd.SyndEntry entry feed-id]
-  {:feed-id feed-id
-   :item-id (or (.getUri entry) (.getLink entry))
-   :title (.getTitle entry)
-   :link (.getLink entry)
-   :published-at (or (.getPublishedDate entry)
-                     (.getUpdatedDate entry))
-   :content (or (some-> entry .getContents first .getValue)
-                (some-> entry .getDescription .getValue))
-   :categories (mapv #(.getName %) (.getCategories entry))})
+  [^SyndEntry entry feed-id]
+  (let [get-content-value (fn [^SyndContent c] (when c (.getValue c)))
+        contents (some-> entry .getContents first)
+        description (.getDescription entry)]
+    {:feed-id feed-id
+     :item-id (or (.getUri entry) (.getLink entry))
+     :title (.getTitle entry)
+     :link (.getLink entry)
+     :published-at (or (.getPublishedDate entry)
+                       (.getUpdatedDate entry))
+     :content (or (get-content-value contents)
+                  (get-content-value description))
+     :categories (mapv #(.getName ^SyndCategory %) (.getCategories entry))}))
 
 
 (defn fetch-items
   "Fetch all new items for a feed, normalized."
   [feed-id url]
   (map #(entry->item % feed-id)
-       (.getEntries (fetch-feed url))))
+       (.getEntries ^SyndFeed (fetch-feed url))))

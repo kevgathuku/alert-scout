@@ -2,7 +2,8 @@
   (:require [alert-scout.fetcher :as fetcher]
             [alert-scout.matcher :as matcher]
             [alert-scout.storage :as storage]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:import (java.util Date)))
 
 
 ;; --- Load users / rules / checkpoints ---
@@ -22,10 +23,10 @@
 (defn run-once
   [feeds]
   (doseq [{:keys [feed-id url]} feeds]
-    (let [last (storage/last-seen feed-id)
+    (let [last-seen (storage/last-seen feed-id)
           items (->> (fetcher/fetch-items feed-id url)
                      (filter #(when-let [ts (:published-at %)]
-                                (.after ts last)))
+                                (or (nil? last-seen) (.after ^Date ts last-seen))))
                      (sort-by :published-at))]
       (doseq [item items]
         (doseq [alert (matcher/match-item rules-by-user item)]
