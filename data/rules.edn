@@ -12,6 +12,12 @@
   :must-not ["test"]
   :min-should-match 1}
 
+{:id "js-rescript"
+  :user-id "kevin"
+  :must ["javascript"]
+  :should ["url" "rescript" ]
+  :min-should-match 1}
+
 {:id "rails-db"
   :user-id "kevin"
   :must ["rails"]
