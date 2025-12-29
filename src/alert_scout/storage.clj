@@ -3,22 +3,17 @@
             [clojure.java.io :as io]
             [alert-scout.schemas :as schemas]))
 
-
 (defn load-edn [path]
   (with-open [r (java.io.PushbackReader. (io/reader path))]
     (edn/read {:eof nil} r)))
 
-
 (defn save-edn! [path data]
   (spit path (pr-str data)))
 
-
 (def checkpoints (atom {}))
-
 
 (defn load-checkpoints! [path]
   (reset! checkpoints (or (load-edn path) {})))
-
 
 (defn save-checkpoints! [path]
   (save-edn! path @checkpoints))
@@ -26,11 +21,9 @@
 (defn last-seen [feed-id]
   (get @checkpoints feed-id))
 
-
 (defn update-checkpoint! [feed-id ts path]
   (swap! checkpoints assoc feed-id ts)
   (save-checkpoints! path))
-
 
 ;; --- Configuration loading with validation ---
 
@@ -75,13 +68,11 @@
                          :errors (:errors (ex-data e))}
                         e))))))
 
-
 (defn save-feeds!
   "Save feeds to an EDN file. Validates before saving."
   [path feeds]
   (schemas/validate-feeds feeds)
   (save-edn! path feeds))
-
 
 (defn add-feed!
   "Add a new feed to the feeds file. Returns the updated feeds vector.
@@ -93,7 +84,6 @@
     (save-feeds! path updated-feeds)
     updated-feeds))
 
-
 (defn remove-feed!
   "Remove a feed by feed-id from the feeds file. Returns the updated feeds vector."
   [path feed-id]
@@ -101,7 +91,6 @@
         updated-feeds (vec (remove #(= (:feed-id %) feed-id) feeds))]
     (save-feeds! path updated-feeds)
     updated-feeds))
-
 
 (defn get-feed
   "Get a specific feed by feed-id."

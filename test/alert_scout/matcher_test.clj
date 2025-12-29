@@ -6,7 +6,7 @@
   (testing "Extract and normalize text from feed item"
     (is (= "hello world test content"
            (matcher/text {:title "Hello World"
-                         :content "Test Content"})))
+                          :content "Test Content"})))
 
     (is (= "just title"
            (matcher/text {:title "Just Title"})))

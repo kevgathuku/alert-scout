@@ -9,6 +9,6 @@
                  [metosin/malli "0.16.4"]]
   :main ^:skip-aot my-stuff.core
   :target-path "target/%s"
-  :plugins [[cider/cider-nrepl "0.58.0"]]
+  :plugins [[cider/cider-nrepl "0.58.0"] [lein-cljfmt "0.9.2"]]
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

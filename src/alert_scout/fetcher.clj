@@ -10,7 +10,6 @@
   (with-open [reader (XmlReader. (URL. url))]
     (.build (SyndFeedInput.) reader)))
 
-
 (defn entry->item
   "Normalize feed entry to a Clojure map."
   [^SyndEntry entry feed-id]
@@ -26,7 +25,6 @@
      :content (or (get-content-value contents)
                   (get-content-value description))
      :categories (mapv #(.getName ^SyndCategory %) (.getCategories entry))}))
-
 
 (defn fetch-items
   "Fetch all new items for a feed, normalized.

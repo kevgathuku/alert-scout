@@ -5,7 +5,6 @@
             [clojure.string :as str])
   (:import (java.util Date)))
 
-
 ;; --- Load and validate configuration on startup ---
 ;; All config is validated against schemas. If any validation fails,
 ;; the namespace will fail to load with clear error messages.
@@ -97,7 +96,7 @@
    (run-once feeds))
   ([feeds]
    ;; Process all feeds functionally (no mutation)
-   (let [         results (map process-feed feeds)
+   (let [results (map process-feed feeds)
          ;; Aggregate results
          all-alerts (mapcat :alerts results)
          total-items (reduce + 0 (map :item-count results))]
@@ -115,7 +114,6 @@
 
      {:alerts (vec all-alerts)
       :items-processed total-items})))
-
 
 ;; --- Export functions ---
 (defn alerts->markdown

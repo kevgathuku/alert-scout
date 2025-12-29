@@ -1,17 +1,14 @@
 (ns alert-scout.matcher
   (:require [clojure.string :as str]))
 
-
 (defn text [item]
   (->> [(:title item) (:content item)]
        (remove nil?)
        (str/join " ")
        str/lower-case))
 
-
 (defn contains-term? [text term]
   (str/includes? (str/lower-case text) (str/lower-case term)))
-
 
 (defn match-rule?
   "Match a simplified string-based rule against a feed item."
@@ -20,14 +17,13 @@
    item]
   (let [t (text item)]
     (and
-      (every? #(contains-term? t %) must)
-      (not-any? #(contains-term? t %) must-not)
-      (>= (count (filter #(contains-term? t %) should))
-          min-should-match))))
+     (every? #(contains-term? t %) must)
+     (not-any? #(contains-term? t %) must-not)
+     (>= (count (filter #(contains-term? t %) should))
+         min-should-match))))
 
 (defn rules-by-user [rules]
   (group-by :user-id rules))
-
 
 (defn match-item
   "Return vector of alerts per user for a single item."
