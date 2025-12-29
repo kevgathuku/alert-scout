@@ -290,6 +290,7 @@ See [CLAUDE.md](CLAUDE.md) for detailed architecture documentation.
 - **[CLAUDE.md](CLAUDE.md)** - Complete architecture and development guide
 - **[doc/malli-examples.md](doc/malli-examples.md)** - Schema validation examples
 - **[doc/startup-validation.md](doc/startup-validation.md)** - Startup validation guide
+- **[doc/email-notifications-design.md](doc/email-notifications-design.md)** - Email notification system design
 - **[.github/CONTRIBUTING.md](.github/CONTRIBUTING.md)** - Contribution guidelines
 - **[.github/workflows/README.md](.github/workflows/README.md)** - CI/CD documentation
 
@@ -318,7 +319,11 @@ Contributions are welcome! Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md)
 
 ## Roadmap
 
-- [ ] Email notifications
+- [ ] **Email notifications** - Daily/weekly digest emails ([Design Doc](doc/email-notifications-design.md))
+  - SQLite queue for alert tracking
+  - User preference management
+  - HTML email templates
+  - SMTP delivery with retry logic
 - [ ] Web UI for rule management
 - [ ] Webhook support
 - [ ] RSS feed aggregator UI
@@ -337,7 +342,7 @@ A: Currently RSS/Atom only. Support for other sources could be added via the fet
 A: Delete or edit `data/checkpoints.edn`. This will reprocess all items on next run.
 
 **Q: Are email alerts supported?**
-A: Not yet! Currently outputs to terminal/files. Email support is on the roadmap.
+A: Not yet, but planned! Email notifications will use daily/weekly digests to prevent spam. See the [design document](doc/email-notifications-design.md) for details.
 
 ## License
 
