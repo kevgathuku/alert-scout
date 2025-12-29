@@ -29,7 +29,8 @@
 
 
 (defn fetch-items
-  "Fetch all new items for a feed, normalized."
-  [feed-id url]
+  "Fetch all new items for a feed, normalized.
+   Takes a Feed map with :feed-id and :url keys."
+  [{:keys [feed-id url]}]
   (map #(entry->item % feed-id)
        (.getEntries ^SyndFeed (fetch-feed url))))

@@ -93,6 +93,7 @@ The application follows a pipeline architecture with clear separation of concern
 
 1. **Fetcher** (`alert-scout.fetcher`) - RSS/Atom feed fetching and parsing
    - Uses Rome Tools library for feed parsing
+   - Takes Feed maps (`:feed-id`, `:url`) as input
    - Normalizes feed entries into a common map structure with `:feed-id`, `:item-id`, `:title`, `:link`, `:published-at`, `:content`, `:categories`
 
 2. **Matcher** (`alert-scout.matcher`) - Rule matching engine
@@ -179,6 +180,23 @@ When adding new features, maintain this separation:
 (doseq [feed feeds]
   (swap! state conj (process feed)))
 ```
+
+**Domain objects as maps**: Functions should accept domain objects (maps) rather than individual fields:
+```clojure
+;; Good - takes Feed map
+(defn fetch-items [{:keys [feed-id url]}]
+  ...)
+
+;; Bad - individual parameters
+(defn fetch-items [feed-id url]
+  ...)
+```
+
+This approach:
+- Makes function signatures more flexible (easy to add new fields)
+- Enforces schema contracts (Feed maps are validated)
+- Improves composability (pass entire object through pipeline)
+- Reduces parameter coupling
 
 ### Type Hints and Reflection
 

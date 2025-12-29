@@ -73,9 +73,10 @@
 ;; --- Fetch, match, emit alerts, update checkpoint ---
 (defn process-feed
   "Process a single feed and return its results without side effects."
-  [{:keys [feed-id url]}]
-  (let [last-seen (storage/last-seen feed-id)
-        items (->> (fetcher/fetch-items feed-id url)
+  [feed]
+  (let [{:keys [feed-id url]} feed
+        last-seen (storage/last-seen feed-id)
+        items (->> (fetcher/fetch-items feed)
                    (filter #(when-let [ts (:published-at %)]
                               (or (nil? last-seen) (.after ^Date ts last-seen))))
                    (sort-by :published-at))
