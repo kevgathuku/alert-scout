@@ -36,10 +36,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add Excerpt schema to src/alert_scout/schemas.clj
-- [ ] T005 Enhance Alert schema with optional :excerpts field in src/alert_scout/schemas.clj
-- [ ] T006 Add schema validation tests for Excerpt in test/alert_scout/schemas_test.clj
-- [ ] T007 Add schema validation tests for enhanced Alert in test/alert_scout/schemas_test.clj
+- [X] T004 Add Excerpt schema to src/alert_scout/schemas.clj
+- [X] T005 Enhance Alert schema with optional :excerpts field in src/alert_scout/schemas.clj
+- [X] T006 Add schema validation tests for Excerpt in test/alert_scout/schemas_test.clj
+- [X] T007 Add schema validation tests for enhanced Alert in test/alert_scout/schemas_test.clj
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
