@@ -53,17 +53,17 @@
 
 ### Core Excerpt Logic (US1)
 
-- [ ] T008 [P] [US1] Create alert-scout.excerpts namespace in src/alert_scout/excerpts.clj
-- [ ] T009 [P] [US1] Implement find-term-positions function in src/alert_scout/excerpts.clj
-- [ ] T010 [P] [US1] Implement extract-excerpt with word boundary detection in src/alert_scout/excerpts.clj
-- [ ] T011 [US1] Implement consolidate-excerpts with overlap detection in src/alert_scout/excerpts.clj (depends on T010)
-- [ ] T012 [US1] Implement generate-excerpts main function in src/alert_scout/excerpts.clj (depends on T009, T010, T011)
-- [ ] T013 [US1] Implement generate-excerpts-for-item for title and content in src/alert_scout/excerpts.clj (depends on T012)
+- [X] T008 [P] [US1] Create alert-scout.excerpts namespace in src/alert_scout/excerpts.clj
+- [X] T009 [P] [US1] Implement find-term-positions function in src/alert_scout/excerpts.clj
+- [X] T010 [P] [US1] Implement extract-excerpt with word boundary detection in src/alert_scout/excerpts.clj
+- [X] T011 [US1] Implement consolidate-excerpts with overlap detection in src/alert_scout/excerpts.clj (depends on T010)
+- [X] T012 [US1] Implement generate-excerpts main function in src/alert_scout/excerpts.clj (depends on T009, T010, T011)
+- [X] T013 [US1] Implement generate-excerpts-for-item for title and content in src/alert_scout/excerpts.clj (depends on T012)
 
 ### Matcher Integration (US1)
 
-- [ ] T014 [US1] Add get-matched-terms function to src/alert_scout/matcher.clj (depends on T013)
-- [ ] T015 [US1] Enhance match-item to generate excerpts in src/alert_scout/matcher.clj (depends on T014)
+- [X] T014 [US1] Add get-matched-terms function to src/alert_scout/matcher.clj (depends on T013)
+- [X] T015 [US1] Enhance match-item to generate excerpts in src/alert_scout/matcher.clj (depends on T014)
 
 ### Formatter Namespace (US1)
 
@@ -158,6 +158,7 @@
 ### Within Each User Story
 
 **User Story 1 Dependencies**:
+
 - T008-T010 can run in parallel (different functions in excerpts.clj)
 - T011 depends on T010 (uses extract-excerpt)
 - T012 depends on T009, T010, T011 (uses all previous functions)
@@ -172,6 +173,7 @@
 - T033-T035 depend on T015, T019 (integration tests need implementation)
 
 **User Story 2 Dependencies**:
+
 - T036-T038 can run in parallel (different export functions in formatter.clj)
 - T039 depends on T037, T038 (core.clj uses formatter export functions)
 - T040-T042 can run in parallel (formatter export tests)
@@ -254,6 +256,7 @@ With multiple developers:
 **Total Tasks**: 50
 
 **By Phase**:
+
 - Setup: 3 tasks
 - Foundational: 4 tasks (BLOCKS all user stories)
 - User Story 1 (P1): 28 tasks (core logic + formatter + tests)
@@ -261,6 +264,7 @@ With multiple developers:
 - Polish: 7 tasks
 
 **By Type**:
+
 - Implementation: 29 tasks (excerpts + formatter + integration)
 - Tests: 21 tasks (42% test coverage)
 - Setup/Verification: 7 tasks
@@ -272,6 +276,7 @@ With multiple developers:
 **Critical Path**: Setup → Foundational → US1 Core → US1 Formatter → US1 Integration (11 sequential tasks)
 
 **Estimated Effort** (assuming constitution-compliant REPL-driven development):
+
 - Setup + Foundational: 2 hours
 - User Story 1: 8-10 hours (core logic + formatter + tests + integration)
 - User Story 2: 2-3 hours (exports + tests)
@@ -279,11 +284,13 @@ With multiple developers:
 - **Total**: ~14-17 hours for complete feature
 
 **Architectural Impact**:
+
 - New namespace: `alert-scout.formatter` separates presentation from orchestration
 - Cleaner separation of concerns aligned with constitution principles
 - Additional ~2 hours for formatter namespace but improved maintainability
 
 **Constitution Compliance Built-in**:
+
 - ✅ Pure functions (excerpts.clj returns data)
 - ✅ Schema validation (Excerpt and Alert schemas)
 - ✅ Zero reflection (all string operations type-hinted as needed)
