@@ -108,14 +108,17 @@ specs/001-content-excerpts/
 
 ```text
 src/alert_scout/
-├── core.clj            # [MODIFY] Update format-alert, export functions
+├── core.clj            # [MODIFY] Orchestration only, use formatter namespace
+├── formatter.clj       # [NEW] Output formatting (terminal, markdown, EDN)
 ├── matcher.clj         # [MODIFY] Add excerpt generation to match-item
 ├── schemas.clj         # [MODIFY] Add Excerpt schema, update Alert schema
 ├── excerpts.clj        # [NEW] Core excerpt extraction logic
-└── fetcher.clj         # [NO CHANGE] Feed fetching unchanged
+├── fetcher.clj         # [NO CHANGE] Feed fetching unchanged
+└── storage.clj         # [NO CHANGE] Storage layer unchanged
 
 test/alert_scout/
-├── core_test.clj       # [MODIFY] Add tests for updated display functions
+├── core_test.clj       # [MODIFY] Update tests for orchestration
+├── formatter_test.clj  # [NEW] Tests for formatting functions
 ├── matcher_test.clj    # [MODIFY] Add tests for excerpt integration
 ├── schemas_test.clj    # [MODIFY] Add tests for new Excerpt schema
 └── excerpts_test.clj   # [NEW] Unit tests for excerpt extraction
@@ -126,13 +129,53 @@ data/
 └── users.edn           # [NO CHANGE] Existing user configuration
 ```
 
-**Structure Decision**: Single project structure. This is a pure Clojure CLI application following the existing alert-scout namespace organization. New excerpt functionality will live in a dedicated `excerpts.clj` namespace with integration points in `matcher.clj` (excerpt generation) and `core.clj` (display/export).
+**Structure Decision**: Single project structure. This is a pure Clojure CLI application following the existing alert-scout namespace organization. New excerpt functionality will live in a dedicated `excerpts.clj` namespace with integration points in `matcher.clj` (excerpt generation) and `formatter.clj` (display/export). A new `formatter.clj` namespace separates presentation concerns from orchestration in `core.clj`.
 
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
 No violations - all constitution principles satisfied.
+
+## Architectural Decisions
+
+### Formatter Namespace Separation
+
+**Decision**: Create dedicated `alert-scout.formatter` namespace for all output formatting logic
+
+**Rationale**:
+- **Separation of concerns**: Data transformation (excerpts) separated from presentation (formatting)
+- **Single responsibility**: Core.clj becomes orchestration only, formatter.clj handles all output
+- **Reusability**: Formatting functions can be reused across different output contexts
+- **Testability**: Easier to test formatting logic in isolation
+- **Constitution alignment**: Follows functional purity principle (formatting as pure transformation)
+
+**Scope of formatter namespace**:
+- Terminal formatting: `format-alert` with ANSI colors
+- Markdown export: `alerts->markdown` with bold highlighting
+- EDN export: `alerts->edn` with structured data
+- Highlight functions: `highlight-terms-terminal`, `highlight-terms-markdown`
+- Shared formatting utilities
+
+**Migration from core.clj**:
+- Move `format-alert` → `formatter/format-alert`
+- Move `alerts->markdown` → `formatter/alerts->markdown`
+- Move `alerts->edn` → `formatter/alerts->edn`
+- Move color/highlighting utilities → formatter namespace
+- Core.clj retains: orchestration, REPL interface, `run-once`, `save-alerts!`
+
+**Benefits**:
+1. Core.clj becomes simpler (orchestration only)
+2. Formatter logic independently testable
+3. Clear boundary between data and presentation
+4. Easier to add new export formats (JSON, HTML, etc.)
+5. Follows existing pattern (matcher, fetcher, storage are separate namespaces)
+
+**Implementation impact**:
+- New file: `src/alert_scout/formatter.clj`
+- New test file: `test/alert_scout/formatter_test.clj`
+- Modified: `src/alert_scout/core.clj` (require formatter, use formatter functions)
+- Additional tasks: ~3-4 tasks for namespace creation and migration
 
 ## Phase Summary
 
@@ -194,23 +237,30 @@ No violations - all constitution principles satisfied.
    - Pure functions following constitution principle I
    - Type hints for string operations (principle III)
 
-2. **src/alert_scout/matcher.clj** (MODIFY)
+2. **src/alert_scout/formatter.clj** (NEW)
+   - All output formatting functions (terminal, markdown, EDN)
+   - `format-alert` with ANSI colors
+   - `alerts->markdown`, `alerts->edn`
+   - `highlight-terms-terminal`, `highlight-terms-markdown`
+
+3. **src/alert_scout/matcher.clj** (MODIFY)
    - Add `get-matched-terms` function
    - Enhance `match-item` to generate excerpts
    - Integrate with excerpts namespace
 
-3. **src/alert_scout/core.clj** (MODIFY)
-   - Update `format-alert` for terminal display
-   - Update `alerts->markdown` for markdown export
-   - Ensure EDN export includes excerpts
+4. **src/alert_scout/core.clj** (MODIFY)
+   - Orchestration only (run-once, save-alerts!)
+   - Require and use formatter namespace
+   - Remove formatting functions (moved to formatter.clj)
 
-4. **src/alert_scout/schemas.clj** (MODIFY)
+5. **src/alert_scout/schemas.clj** (MODIFY)
    - Add `Excerpt` schema
    - Enhance `Alert` schema with `:excerpts` field
    - Ensure backwards compatibility
 
-5. **test/** (NEW + MODIFY)
+6. **test/** (NEW + MODIFY)
    - New: `test/alert_scout/excerpts_test.clj`
+   - New: `test/alert_scout/formatter_test.clj`
    - Modify existing test files for integration
 
 ### Testing Strategy
@@ -221,10 +271,20 @@ No violations - all constitution principles satisfied.
 - `consolidate-excerpts` with overlaps
 - Schema validation (valid/invalid cases)
 
+**Unit Tests** (formatter_test.clj):
+- `format-alert` with excerpts and ANSI colors
+- `alerts->markdown` with bold highlighting
+- `alerts->edn` with structured data
+- `highlight-terms-terminal` and `highlight-terms-markdown`
+
 **Integration Tests** (matcher_test.clj):
 - `match-item` returns alerts with excerpts
 - Excerpts generated for matching items
 - Edge cases: nil content, short content, many matches
+
+**Integration Tests** (core_test.clj):
+- `run-once` uses formatter namespace correctly
+- `save-alerts!` works with new formatter functions
 
 **Performance Tests**:
 - Verify <5ms per alert requirement
@@ -235,12 +295,13 @@ No violations - all constitution principles satisfied.
 
 1. Start with `excerpts.clj` core functions (TDD)
 2. Add schemas to `schemas.clj`
-3. Integrate into `matcher.clj`
-4. Update display in `core.clj`
-5. Add comprehensive tests
-6. Run `lein check` (zero reflection warnings)
-7. Run `lein test` (all tests pass)
-8. Manual REPL testing per quickstart.md
+3. Create `formatter.clj` with formatting functions
+4. Integrate excerpts into `matcher.clj`
+5. Update `core.clj` to use formatter namespace
+6. Add comprehensive tests (excerpts, formatter, integration)
+7. Run `lein check` (zero reflection warnings)
+8. Run `lein test` (all tests pass)
+9. Manual REPL testing per quickstart.md
 
 **REPL-First Development**:
 - Test each function interactively as you write it
