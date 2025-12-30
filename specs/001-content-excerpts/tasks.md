@@ -24,9 +24,9 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Verify Clojure project structure follows src/alert_scout/ pattern
-- [ ] T002 Confirm Malli dependency available in project.clj
-- [ ] T003 [P] Review existing ANSI color functions in src/alert_scout/core.clj for reuse
+- [X] T001 Verify Clojure project structure follows src/alert_scout/ pattern
+- [X] T002 Confirm Malli dependency available in project.clj
+- [X] T003 [P] Review existing ANSI color functions in src/alert_scout/core.clj for reuse
 
 ---
 
