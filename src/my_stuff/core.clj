@@ -9,7 +9,29 @@
 
 (comment
   (let [x 3] (inc x))
-  (map inc [1 2 3]))
+  (map inc [1 2
+            3])
+  (+ 1 2 3)
+  (map inc xs)
+  (->> xs (filter even?) (map inc))
+
+  (defn load-edn [path]
+    (with-open [r (java.io.PushbackReader. (io/reader path))]
+      (edn/read r)))
+
+  (println (+ 1 2 3))
+  (map (comp inc) [1 2 3])
+
+  (->> xs (filter even?) (map inc))
+  (->> [1 2 3] (filter even?) (map inc))
+
+  (filter even? xs)
+
+  (defn load-edn [path]
+    (with-open [r (io/reader path)]
+      (edn/read r)))
+
+  (+ 1 2 3))
 
 (defn -main
   "I don't do a whole lot ... yet."

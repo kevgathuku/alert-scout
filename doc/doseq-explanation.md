@@ -49,16 +49,19 @@ Think of it as a functional `for` loop that you use when you don't care about th
 ```
 
 **What it does:**
+
 - Iterates over each `result` from `(map process-feed feeds)`
 - Destructures each result to extract `:feed-id`, `:url`, `:alerts`, `:latest-item`
 - Performs side effects for each feed
 
 **Side effects performed:**
+
 1. **Prints** feed status message
 2. **Emits** alerts (via nested `doseq`)
 3. **Updates** checkpoint in database
 
 **Why `doseq` here?**
+
 - We're doing I/O (printing, database writes)
 - We don't need a return value
 - We want to execute immediately (not lazily)
@@ -90,11 +93,13 @@ Iteration 2:
 ```
 
 **What it does:**
+
 - **Nested** inside the first `doseq`
 - Iterates over all alerts for the current feed
 - Calls `emit-alert` for each one
 
 **Why `doseq` here?**
+
 - `emit-alert` is a side-effecting function (prints to console)
 - We don't need the return values
 - We want each alert printed immediately
@@ -125,6 +130,7 @@ You **could** technically use `map`, but it would be wrong:
 ```
 
 **Problems:**
+
 1. **`map` is lazy** - side effects might not execute until you realize the sequence
 2. **Unused return value** - `map` returns a sequence you don't need
 3. **Unclear intent** - Signals you want a transformed collection, but you don't
@@ -171,6 +177,7 @@ The `run-once` function follows a clear pattern:
 ```
 
 **Characteristics:**
+
 - No I/O, no printing, no database writes
 - Uses `map`, `mapcat`, `reduce`
 - Returns data structures
@@ -186,6 +193,7 @@ The `run-once` function follows a clear pattern:
 ```
 
 **Characteristics:**
+
 - Uses `doseq` for iteration
 - Performs I/O operations
 - Does NOT transform data
@@ -212,11 +220,13 @@ Clojure also has `run!` which is similar to `doseq`:
 ```
 
 **When to use `run!`:**
+
 - Single function call per item
 - No destructuring needed
 - More concise
 
 **When to use `doseq`:**
+
 - Multiple operations per item
 - Need destructuring
 - Nested iteration
@@ -276,7 +286,7 @@ Clojure also has `run!` which is similar to `doseq`:
 
 ## Summary
 
-### In `run-once`, `doseq` is used for:
+### In `run-once`, `doseq` is used for
 
 1. **First `doseq`**: Iterate over feed results
    - Print feed status
@@ -286,7 +296,7 @@ Clojure also has `run!` which is similar to `doseq`:
 2. **Second `doseq`**: Iterate over alerts for current feed
    - Print each alert to console
 
-### Key Takeaways:
+### Key Takeaways
 
 ✅ **Use `doseq` for side effects** (I/O, printing, database writes)
 ✅ **Use `map`/`filter`/`reduce` for data transformation** (pure functions)
@@ -294,14 +304,16 @@ Clojure also has `run!` which is similar to `doseq`:
 ✅ **`doseq` returns `nil`** - you don't use its return value
 ✅ **Separate pure and impure code** - compute data first, then perform side effects
 
-### Mental Model:
+### Mental Model
 
 Think of `doseq` as:
+
 ```
 "For each item in this collection, do these side effects"
 ```
 
 Not:
+
 ```
 "Transform this collection into a new collection"  ← That's map/filter
 ```
@@ -309,5 +321,6 @@ Not:
 ---
 
 **See Also:**
+
 - [Clojure doseq documentation](https://clojuredocs.org/clojure.core/doseq)
 - [Functional Programming Style](../CLAUDE.md#functional-programming-style)
