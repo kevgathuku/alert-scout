@@ -155,12 +155,11 @@
 
 (deftest test-match-item-returns-alerts-with-excerpts
   (testing "match-item returns alerts with excerpts when terms match"
-    (let [rules-by-user {"kevin" [{:id "rails-api"
-                                   :user-id "kevin"
-                                   :must ["rails" "api"]
-                                   :should []
-                                   :must-not []
-                                   :min-should-match 0}]}
+    (let [rules [{:id "rails-api"
+                  :must ["rails" "api"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           item {:feed-id "hn"
                 :item-id "123"
                 :title "Building Rails API"
@@ -168,14 +167,13 @@
                 :link "https://example.com/rails-api"
                 :published-at (Date.)
                 :categories ["programming"]}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       ;; Should have one alert
       (is (= 1 (count alerts)))
 
       (let [alert (first alerts)]
         ;; Should have correct metadata
-        (is (= "kevin" (:user-id alert)))
         (is (= "rails-api" (:rule-id alert)))
         (is (= item (:item alert)))
 
@@ -195,12 +193,11 @@
         (is (every? #(#{:title :content} (:source %)) (:excerpts alert))))))
 
   (testing "match-item includes both title and content excerpts when both match"
-    (let [rules-by-user {"alice" [{:id "test-rule"
-                                   :user-id "alice"
-                                   :must ["rails"]
-                                   :should []
-                                   :must-not []
-                                   :min-should-match 0}]}
+    (let [rules [{:id "test-rule"
+                  :must ["rails"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           item {:feed-id "blog"
                 :item-id "456"
                 :title "Rails Development Best Practices"
@@ -208,7 +205,7 @@
                 :link "https://example.com/rails-dev"
                 :published-at (Date.)
                 :categories ["web"]}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       (is (= 1 (count alerts)))
 
@@ -220,12 +217,11 @@
         (is (contains? sources :content)))))
 
   (testing "match-item limits excerpts to 3 total"
-    (let [rules-by-user {"bob" [{:id "many-matches"
-                                 :user-id "bob"
-                                 :must ["rails"]
-                                 :should []
-                                 :must-not []
-                                 :min-should-match 0}]}
+    (let [rules [{:id "many-matches"
+                  :must ["rails"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           ;; Content with many distant matches
           item {:feed-id "news"
                 :item-id "789"
@@ -238,7 +234,7 @@
                 :link "https://example.com/rails-news"
                 :published-at (Date.)
                 :categories ["frameworks"]}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       (is (= 1 (count alerts)))
 
@@ -248,12 +244,11 @@
 
 (deftest test-match-item-handles-nil-content
   (testing "match-item handles nil content gracefully"
-    (let [rules-by-user {"alice" [{:id "rails-rule"
-                                   :user-id "alice"
-                                   :must ["rails"]
-                                   :should []
-                                   :must-not []
-                                   :min-should-match 0}]}
+    (let [rules [{:id "rails-rule"
+                  :must ["rails"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           item {:feed-id "hn"
                 :item-id "nil-content"
                 :title "Building Rails Applications"
@@ -261,7 +256,7 @@
                 :link "https://example.com/rails"
                 :published-at (Date.)
                 :categories []}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       ;; Should still generate alert
       (is (= 1 (count alerts)))
@@ -279,12 +274,11 @@
         (is (every? #(schemas/valid? schemas/Excerpt %) (:excerpts alert))))))
 
   (testing "match-item handles empty content gracefully"
-    (let [rules-by-user {"bob" [{:id "api-rule"
-                                 :user-id "bob"
-                                 :must ["api"]
-                                 :should []
-                                 :must-not []
-                                 :min-should-match 0}]}
+    (let [rules [{:id "api-rule"
+                  :must ["api"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           item {:feed-id "blog"
                 :item-id "empty-content"
                 :title "API Development Guide"
@@ -292,7 +286,7 @@
                 :link "https://example.com/api"
                 :published-at (Date.)
                 :categories []}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       ;; Should still generate alert
       (is (= 1 (count alerts)))
@@ -303,12 +297,11 @@
         (is (every? #(= :title (:source %)) (:excerpts alert))))))
 
   (testing "match-item handles both nil title and content"
-    (let [rules-by-user {"charlie" [{:id "test-rule"
-                                     :user-id "charlie"
-                                     :must ["rails"]
-                                     :should []
-                                     :must-not []
-                                     :min-should-match 0}]}
+    (let [rules [{:id "test-rule"
+                  :must ["rails"]
+                  :should []
+                  :must-not []
+                  :min-should-match 0}]
           item {:feed-id "test"
                 :item-id "nil-both"
                 :title nil
@@ -316,7 +309,7 @@
                 :link "https://example.com/test"
                 :published-at (Date.)
                 :categories []}
-          alerts (matcher/match-item rules-by-user item)]
+          alerts (matcher/match-item rules item)]
 
       ;; Should not match (no text to match against)
       (is (empty? alerts)))))

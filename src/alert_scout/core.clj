@@ -9,12 +9,9 @@
 ;; --- Load and validate configuration on startup ---
 ;; All config is validated against schemas. If any validation fails,
 ;; the namespace will fail to load with clear error messages.
-(def users (storage/load-users "data/users.edn"))
 (def rules (storage/load-rules "data/rules.edn"))
 (def feeds (storage/load-feeds "data/feeds.edn"))
 (storage/load-checkpoints! "data/checkpoints.edn")
-
-(def rules-by-user (matcher/rules-by-user rules))
 
 ;; --- Alert formatting (using formatter namespace) ---
 (defn emit-alert
@@ -52,7 +49,7 @@
                    (filter #(when-let [ts (:published-at %)]
                               (or (nil? last-seen) (.after ^Date ts last-seen))))
                    (sort-by :published-at))
-        alerts (mapcat #(matcher/match-item rules-by-user %) items)
+        alerts (mapcat #(matcher/match-item rules %) items)
         latest-item (last items)]
     {:feed-id feed-id
      :url url

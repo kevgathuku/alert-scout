@@ -9,13 +9,12 @@
   :user-id "kevin"
   :must ["rails"]
   :should ["kamal" "docker" "ruby" "deploy"]
-  :must-not ["test"]
   :min-should-match 1}
 
- {:id "js-rescript"
+ {:id "rescript"
   :user-id "kevin"
-  :must ["javascript"]
-  :should ["url" "rescript"]
+  :must ["rescript"]
+  :should ["javascript"]
   :min-should-match 1}
 
  {:id "rails-db"
@@ -32,8 +31,8 @@
   :min-should-match 1}
 
  {:id "rule-ai"
-  :user-id "admin"
+  :user-id "kevin"
   :must ["ai"]
   :should ["llm" "gpt" "claude"]
-  :min-should-match 2}]
+  :min-should-match 1}]
 

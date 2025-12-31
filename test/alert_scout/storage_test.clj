@@ -84,18 +84,6 @@
     (spit test-feeds-path "[{:feed-id \"hn\" :url \"https://news.ycombinator.com/rss\"}]")
     (is (nil? (storage/get-feed test-feeds-path "nonexistent")))))
 
-(deftest test-load-users-validation
-  (testing "Valid users load successfully"
-    (spit test-users-path "[{:id \"alice\" :email \"alice@example.com\"}]")
-    (let [users (storage/load-users test-users-path)]
-      (is (= 1 (count users)))
-      (is (= "alice" (:id (first users))))))
-
-  (testing "Invalid email throws validation error"
-    (spit test-users-path "[{:id \"alice\" :email \"not-an-email\"}]")
-    (is (thrown-with-msg? Exception #"Invalid users"
-                          (storage/load-users test-users-path)))))
-
 (deftest test-load-rules-validation
   (testing "Valid rules load successfully"
     (spit test-rules-path "[{:id \"test-rule\" :user-id \"alice\" :must [\"rails\"]}]")
@@ -144,8 +132,8 @@
                           :link "https://example.com/test"
                           :published-at (Date.)}
                    :excerpts [{:text "Building Rails API"
-                              :matched-terms ["rails" "api"]
-                              :source :title}]}]
+                               :matched-terms ["rails" "api"]
+                               :source :title}]}]
           temp-file "test-resources/test-alerts.md"]
       (try
         ;; Save to file
@@ -189,8 +177,8 @@
                           :link "https://example.com/test"
                           :published-at (Date.)}
                    :excerpts [{:text "Test excerpt"
-                              :matched-terms ["test"]
-                              :source :content}]}]
+                               :matched-terms ["test"]
+                               :source :content}]}]
           temp-file "test-resources/test-alerts.edn"]
       (try
         ;; Save to file

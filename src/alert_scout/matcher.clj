@@ -23,9 +23,6 @@
      (>= (count (filter #(contains-term? t %) should))
          min-should-match))))
 
-(defn rules-by-user [rules]
-  (group-by :user-id rules))
-
 (defn get-matched-terms
   "Extract terms that actually matched from rule.
 
@@ -43,16 +40,14 @@
     (vec (distinct (concat must-matches should-matches)))))
 
 (defn match-item
-  "Return vector of alerts per user for a single item.
+  "Return vector of alerts for a single item.
 
   Each alert includes excerpts showing where matched terms appear."
-  [rules-by-user item]
-  (for [[user-id rules] rules-by-user
-        rule rules
+  [rules item]
+  (for [rule rules
         :when (match-rule? rule item)
         :let [matched-terms (get-matched-terms rule item)
               item-excerpts (excerpts/generate-excerpts-for-item item matched-terms)]]
-    {:user-id user-id
-     :rule-id (:id rule)
+    {:rule-id (:id rule)
      :item item
      :excerpts item-excerpts}))
