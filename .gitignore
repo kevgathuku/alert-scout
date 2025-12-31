@@ -34,6 +34,7 @@ pom.xml.asc
 
 .clj-kondo/
 .lsp/
+.rebel_readline_history
 
 # Universal patterns
 .DS_Store
