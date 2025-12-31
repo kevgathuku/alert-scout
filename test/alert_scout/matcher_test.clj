@@ -93,9 +93,9 @@
           item {:title "Rails Deploy with Docker" :content ""}
           result (matcher/apply-rule rule item)]
       (is (some? result))
-      ;; Should have rails (must) + at least 1 should term
-      (is (contains? (set result) "rails"))
-      (is (>= (count result) 2))))
+      ;; Should have must + matching should terms
+      (is (every? (set result) (:must rule)))
+      (is (every? (set result) (-> rule :should set (disj "kamal"))))))
 
   (testing "Rule with missing 'must' term returns nil"
     (let [rule {:must ["rails"]
