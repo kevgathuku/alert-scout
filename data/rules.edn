@@ -32,7 +32,7 @@
 
  {:id "rule-ai"
   :user-id "kevin"
-  :must ["ai"]
+  :must []
   :should ["llm" "gpt" "claude"]
   :min-should-match 1}]
 
