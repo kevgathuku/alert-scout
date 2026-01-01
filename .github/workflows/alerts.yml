@@ -28,3 +28,4 @@ jobs:
         with:
           commit_message: "chore: Update alerts - $(date '+%Y-%m-%d %H:%M:%S %Z')"
           file_pattern: "data/ content/"
+          branch: gh-pages
