@@ -62,18 +62,23 @@
                          text-len
                          (find-word-boundary text desired-end :before))
 
-           ;; Extract text with ellipsis
-           needs-start-ellipsis (pos? excerpt-start)
-           needs-end-ellipsis (< excerpt-end text-len)
+           ;; Safety check: if word boundaries crossed, fall back to desired positions
+           [final-start final-end] (if (>= excerpt-start excerpt-end)
+                                      [desired-start desired-end]
+                                      [excerpt-start excerpt-end])
 
-           excerpt-text (subs text excerpt-start excerpt-end)
+           ;; Extract text with ellipsis
+           needs-start-ellipsis (pos? final-start)
+           needs-end-ellipsis (< final-end text-len)
+
+           excerpt-text (subs text final-start final-end)
            final-text (str (when needs-start-ellipsis "...")
                            excerpt-text
                            (when needs-end-ellipsis "..."))]
 
        {:text final-text
-        :start excerpt-start
-        :end excerpt-end
+        :start final-start
+        :end final-end
         :position position}))))
 
 (defn consolidate-excerpts

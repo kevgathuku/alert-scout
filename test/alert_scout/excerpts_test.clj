@@ -106,7 +106,24 @@
       (is (.contains (:text excerpt) "fox"))
       ;; Should not cut words in half
       (is (or (.contains (:text excerpt) "brown")
-              (.contains (:text excerpt) "jumps"))))))
+              (.contains (:text excerpt) "jumps")))))
+
+  (testing "Word boundary crossing with long unbroken text"
+    ;; This test verifies the bugfix for StringIndexOutOfBoundsException
+    ;; when word boundaries cross (start > end)
+    (let [;; Create text where word boundaries would cross
+          ;; Long word before match, long word after match, no spaces
+          text (str "VeryLongWordWithoutAnySpacesAtAllThatGoesOnForManyCharactersBeforeTheMatch"
+                    "rails"  ;; matched term at position 76-81
+                    "AnotherVeryLongWordWithoutAnySpacesAtAllThatGoesOnForManyCharactersAfter")
+          position {:start 76 :end 81 :term "rails"}
+          result (excerpts/extract-excerpt text position 50)]
+      ;; Should not crash and should return valid excerpt
+      (is (some? result))
+      (is (string? (:text result)))
+      (is (.contains (:text result) "rails"))
+      ;; Most importantly: start should be less than end (no boundary crossing)
+      (is (< (:start result) (:end result))))))
 
 (deftest test-extract-excerpt-with-short-content
   (testing "Short content shows entire text without ellipsis"
