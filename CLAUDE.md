@@ -259,6 +259,22 @@ This project is designed for REPL-driven development:
 - To reload configuration changes, use `:reload-all` flag when requiring namespaces
 - `run-once` returns structured data `{:alerts [...] :items-processed n}` for inspection
 
+### Bug Fixing Workflow
+
+When fixing bugs, follow a strict Test-Driven Development (TDD) approach:
+
+1. **Reproduce the bug** - Verify it exists and understand the trigger
+2. **Write a failing test** - Create a test that captures the bug
+3. **Verify the test fails** - Ensure the test actually catches the bug
+4. **Fix the bug** - Implement the minimal fix
+5. **Verify the test passes** - Ensure the fix works
+6. **Run full test suite** - Ensure no regressions
+7. **Document the bug** - Add comments explaining the fix
+
+**Critical:** Always verify the test fails before fixing. If the test passes when it should fail, it doesn't actually catch the bug.
+
+See `doc/bug-fixing-workflow.md` for the complete workflow, examples, and best practices.
+
 ## Project Structure
 
 ```
@@ -280,6 +296,7 @@ data/                  # Configuration and state (EDN files)
 
 doc/                   # Documentation
   malli-examples.md   # Comprehensive Malli usage examples
+  bug-fixing-workflow.md  # TDD workflow for fixing bugs
 ```
 
 ## Active Technologies
