@@ -41,19 +41,17 @@
 (defn process-feed
   "Process a single feed and return its results without side effects."
   [feed]
-  (let [{:keys [feed-id url]} feed
+  (let [{:keys [feed-id]} feed
         last-seen (storage/last-seen feed-id)
         items (->> (fetcher/fetch-items feed)
                    (filter #(when-let [ts (:published-at %)]
                               (or (nil? last-seen) (.after ^Date ts last-seen))))
                    (sort-by :published-at))
-        alerts (mapcat #(matcher/match-item rules %) items)
-        latest-item (last items)]
-    {:feed-id feed-id
-     :url url
+        alerts (mapcat #(matcher/match-item rules %) items)]
+    {:feed feed
      :items items
      :alerts alerts
-     :latest-item latest-item
+     :latest-item (last items)
      :item-count (count items)}))
 
 (defn run-once
@@ -70,7 +68,7 @@
          total-items (reduce + 0 (map :item-count results))]
 
      ;; Perform side effects after data processing
-     (doseq [{:keys [feed-id url alerts latest-item]} results]
+     (doseq [{:keys [alerts latest-item] {:keys [feed-id url]} :feed} results]
        (println (formatter/colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
        (run! emit-alert alerts)
        (when latest-item
