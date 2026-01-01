@@ -1,0 +1,27 @@
+name: Feed alerts
+
+on:
+  schedule:
+    - cron: "*/15 * * * *" # every 15 minutes
+  workflow_dispatch: # allow manual run
+
+jobs:
+  run-alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeLaGuardo/setup-clojure@v12
+        with:
+          lein: latest
+
+      - name: Run alerting job
+        run: lein run
+
+      - name: Commit generated alerts
+        run: |
+          git config user.name "alert-bot"
+          git config user.email "alerts@users.noreply.github.com"
+          git add data/ content/
+          git commit -m "Update alerts" || echo "No changes"
+          git push
