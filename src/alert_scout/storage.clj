@@ -91,6 +91,7 @@
 (defn save-alerts!
   "Save alerts to a file in the specified format (:markdown or :edn)."
   [alerts path format]
+  (io/make-parents path)
   (let [content (case format
                   :markdown (formatter/alerts->markdown alerts)
                   :edn (formatter/alerts->edn alerts)

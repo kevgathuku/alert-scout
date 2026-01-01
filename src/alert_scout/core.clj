@@ -84,7 +84,10 @@
       :items-processed total-items})))
 
 (defn -main
-  "Main entry point for lein run."
-  [& args]
-  (run-once)
-  (shutdown-agents))
+  "Main entry point for lein run.
+   Optionally accepts an output path for markdown export (default: content/alerts.md)."
+  [& [output-path]]
+  (let [path (or output-path "content/alerts.md")
+        {:keys [alerts]} (run-once)]
+    (storage/save-alerts! alerts path :markdown)
+    (shutdown-agents)))
