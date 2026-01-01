@@ -52,7 +52,19 @@ jobs:
             ${{ runner.os }}-lein-
 
       # Download all alert artifacts from the alerts workflow
-      - name: Download alert artifacts
+      - name: Download alert artifacts (specific run)
+        if: ${{ github.event.inputs.run_id != '' }}
+        uses: dawidd6/action-download-artifact@v11
+        with:
+          workflow: alerts.yml
+          name: alerts-*
+          path: content/
+          search_artifacts: true
+          workflow_conclusion: success
+          run_id: ${{ github.event.inputs.run_id }}
+
+      - name: Download alert artifacts (latest from branch)
+        if: ${{ github.event.inputs.run_id == '' }}
         uses: dawidd6/action-download-artifact@v11
         with:
           workflow: alerts.yml
@@ -61,7 +73,6 @@ jobs:
           search_artifacts: true
           branch: main
           workflow_conclusion: success
-          run_id: ${{ github.event.inputs.run_id }}
 
       - name: List downloaded artifacts
         run: |
