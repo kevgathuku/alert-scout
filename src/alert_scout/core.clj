@@ -84,7 +84,9 @@
       :items-processed total-items})))
 
 (defn -main
-  "Main entry point for lein run."
+  "Main entry point for lein run.
+   Saves alerts as individual EDN files in content/{rule-id}/YYYY-MM-DD/{timestamp}.edn"
   [& args]
-  (run-once)
-  (shutdown-agents))
+  (let [{:keys [alerts]} (run-once)]
+    (storage/save-alerts-individual! alerts "content")
+    (shutdown-agents)))
