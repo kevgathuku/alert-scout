@@ -57,7 +57,8 @@ jobs:
         uses: dawidd6/action-download-artifact@v11
         with:
           workflow: alerts.yml
-          name: alerts-*
+          name: alerts-.*
+          name_is_regexp: true
           path: content/
           search_artifacts: true
           workflow_conclusion: success
@@ -68,7 +69,8 @@ jobs:
         uses: dawidd6/action-download-artifact@v11
         with:
           workflow: alerts.yml
-          name: alerts-*
+          name: alerts-.*
+          name_is_regexp: true
           path: content/
           search_artifacts: true
           branch: main
