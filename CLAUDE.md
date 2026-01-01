@@ -280,9 +280,11 @@ See `doc/bug-fixing-workflow.md` for the complete workflow, examples, and best p
 ```
 src/
   alert-scout/          # Main application logic
-    core.clj           # Orchestration, formatting, exports
+    core.clj           # Orchestration (run-once, process-feed)
+    excerpts.clj       # Core excerpt extraction logic
     fetcher.clj        # RSS/Atom feed fetching
-    matcher.clj        # Rule matching engine
+    formatter.clj      # Output formatting (terminal, markdown, EDN)
+    matcher.clj        # Rule matching engine with excerpt generation
     storage.clj        # Data persistence with validation
     schemas.clj        # Malli schemas for domain objects
   my-stuff/            # Legacy/scratch namespace
@@ -298,6 +300,28 @@ doc/                   # Documentation
   malli-examples.md   # Comprehensive Malli usage examples
   bug-fixing-workflow.md  # TDD workflow for fixing bugs
 ```
+
+### Namespace Organization
+
+**formatter.clj** - All output formatting (terminal, markdown, EDN):
+- Terminal: ANSI color codes for matched terms
+- Markdown: Bold formatting for exports
+- EDN: Structured data serialization
+- Pure functions: formatting is data transformation
+
+**storage.clj** - Data persistence layer:
+- EDN file I/O for configuration (feeds, rules, users, checkpoints)
+- Alert export via `save-alerts!` (uses formatter namespace)
+- Malli schema validation at boundaries
+- State management for checkpoints (atom + file sync)
+
+**excerpts.clj** - Core excerpt extraction:
+- Text position finding with case-insensitive matching
+- Word boundary detection for clean truncation
+- Excerpt consolidation when matches are close together
+- Pure functions following functional purity principle
+
+**Note**: `save-alerts!` lives in storage.clj (not core.clj) because storage owns all file persistence operations. Core.clj focuses on orchestration only.
 
 ## Active Technologies
 - Clojure 1.11+ (existing project language) (001-content-excerpts)

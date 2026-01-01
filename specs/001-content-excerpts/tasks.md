@@ -112,7 +112,7 @@
 - [ ] T036 [P] [US2] Implement highlight-terms-markdown for bold formatting in src/alert_scout/formatter.clj
 - [ ] T037 [P] [US2] Implement alerts->markdown with excerpt support in src/alert_scout/formatter.clj
 - [ ] T038 [P] [US2] Implement alerts->edn with excerpt support in src/alert_scout/formatter.clj
-- [ ] T039 [US2] Update save-alerts! in core.clj to use formatter functions (depends on T037, T038)
+- [X] T039 [US2] Implement save-alerts! in storage.clj using formatter functions (depends on T037, T038)
 
 ### Export Tests (US2)
 

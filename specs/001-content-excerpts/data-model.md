@@ -98,6 +98,39 @@ This document defines the data structures for excerpt generation, following the 
              :source :content}]}
 ```
 
+### ProcessFeedResult
+
+**Purpose**: Return value from processing a single feed, containing feed info and results.
+
+**Schema**:
+```clojure
+(def ProcessFeedResult
+  [:map {:description "Result of processing a single feed"}
+   [:feed Feed]
+   [:items [:vector FeedItem]]
+   [:alerts [:vector Alert]]
+   [:latest-item [:maybe FeedItem]]
+   [:item-count :int]])
+```
+
+**Attributes**:
+- `feed` (Feed map, required): The feed that was processed with :feed-id and :url
+- `items` (vector of FeedItem, required): New items found in this feed
+- `alerts` (vector of Alert, required): Alerts generated from matching items
+- `latest-item` (FeedItem or nil, required): Most recent item by :published-at (for checkpoint)
+- `item-count` (int, required): Count of new items processed
+
+**Usage**: Returned by `core/process-feed`, collected in `core/run-once` for aggregation and side effects.
+
+**Example Instance**:
+```clojure
+{:feed {:feed-id "hn" :url "https://hnrss.org/frontpage"}
+ :items [{:feed-id "hn" :item-id "123" ...}]
+ :alerts [{:rule-id "rails-api" :item {...} :excerpts [...]}]
+ :latest-item {:feed-id "hn" :item-id "123" :published-at #inst "2025-12-30T12:00:00.000-00:00" ...}
+ :item-count 1}
+```
+
 ## Internal Data Structures
 
 ### TermPosition (intermediate, not validated)

@@ -81,8 +81,9 @@ As an Alert Scout user, when I export alerts to markdown or EDN format, I want e
 ### Key Entities
 
 - **Excerpt**: A snippet of text showing matched content with context
-  - Attributes: text (with context), matched terms, source (title or content), original position
-  - Relationships: belongs to an Alert, references multiple matched terms
+  - Attributes: text (with context), matched-terms (vector of strings), source (title or content)
+  - Relationships: belongs to an Alert, references matched terms from the Rule that triggered the alert
+  - Note: matched-terms are simple strings; position tracking (:start/:end) is internal to excerpt generation
 
 - **Alert** (enhanced): Existing entity now includes excerpts
   - Attributes: rule-id, item (feed item), excerpts (new)

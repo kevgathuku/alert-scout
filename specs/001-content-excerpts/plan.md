@@ -162,7 +162,10 @@ No violations - all constitution principles satisfied.
 - Move `alerts->markdown` → `formatter/alerts->markdown`
 - Move `alerts->edn` → `formatter/alerts->edn`
 - Move color/highlighting utilities → formatter namespace
-- Core.clj retains: orchestration, REPL interface, `run-once`, `save-alerts!`
+- Move `save-alerts!` → `storage/save-alerts!` (storage owns persistence)
+- Core.clj retains: orchestration, REPL interface, `run-once`
+
+**Note**: During implementation, `save-alerts!` was moved to `storage.clj` as storage is responsible for all file persistence operations. This provides better separation of concerns than keeping it in core.clj.
 
 **Benefits**:
 1. Core.clj becomes simpler (orchestration only)
