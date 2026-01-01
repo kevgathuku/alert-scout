@@ -4,13 +4,29 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.12.2"]
-                 [com.bhauman/rebel-readline "0.1.5"]
                  [com.rometools/rome "2.1.0"]
                  [clj-http "3.13.1"]
                  [metosin/malli "0.16.4"]]
   :main ^:skip-aot my-stuff.core
   :target-path "target/%s"
-  :aliases {"rebl" ["trampoline" "run" "-m" "rebel-readline.main"]}
   :plugins [[cider/cider-nrepl "0.58.0"] [lein-cljfmt "0.9.2"]]
-  :profiles {:uberjar {:aot :all
+  :repl-options {:init-ns alert-scout.core
+                 :prompt (fn [ns] (str "\033[1;34m[" ns "]\033[0m=> "))
+                 :init (do
+                         (set! *print-length* 100)
+                         (set! *print-level* 10)
+                         (println "\n╔════════════════════════════════════════╗")
+                         (println "║  Alert Scout REPL                       ║")
+                         (println "║  Type (help) for common commands        ║")
+                         (println "╚════════════════════════════════════════╝\n")
+                         (defn help []
+                           (println "\nCommon Commands:")
+                           (println "  (core/run-once)           - Generate alerts from feeds")
+                           (println "  (core/run-once :user-id)  - Generate alerts for specific user")
+                           (println "  (require '[...])          - Load a namespace")
+                           (println "  (doc symbol)              - Show documentation")
+                           (println "  (source symbol)           - Show source code")
+                           (println "  (dir namespace)           - List namespace contents\n")))}
+  :profiles {:dev {:dependencies [[nrepl/nrepl "1.3.0"]]}
+             :uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
