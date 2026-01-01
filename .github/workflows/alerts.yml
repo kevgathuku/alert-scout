@@ -2,19 +2,18 @@ name: Feed alerts
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # every 15 minutes
-  workflow_dispatch: # allow manual run
+    - cron: "*/15 * * * *" # Every 15 minutes
+  workflow_dispatch: # Allow manual run
 
 jobs:
   run-alerts:
     runs-on: ubuntu-latest
 
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
 
       - name: Set up JDK 25
         uses: actions/setup-java@v4
@@ -22,16 +21,43 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      - uses:  DeLaGuardo/setup-clojure@13.4
+      - name: Set up Clojure
+        uses: DeLaGuardo/setup-clojure@13.4
         with:
           lein: latest
 
-      - name: Run alerting job
+      - name: Cache Leiningen dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            ~/.lein
+          key: ${{ runner.os }}-lein-${{ hashFiles('project.clj') }}
+          restore-keys: |
+            ${{ runner.os }}-lein-
+
+      - name: Restore checkpoints from previous run
+        uses: actions/cache/restore@v4
+        with:
+          path: data/checkpoints.edn
+          key: checkpoints-${{ github.run_number }}
+          restore-keys: |
+            checkpoints-
+
+      # Saves alerts to content/{rule-id}/YYYY-MM-DD/*.edn
+      - name: Fetch feeds and match alerts
         run: lein run
 
-      - name: Commit and push generated alerts
-        uses: stefanzweifel/git-auto-commit-action@v7
+      - name: Save checkpoints for next run
+        uses: actions/cache/save@v4
         with:
-          commit_message: "chore: Update alerts - $(date '+%Y-%m-%d %H:%M:%S %Z')"
-          file_pattern: "data/ content/"
-          branch: gh-pages
+          path: data/checkpoints.edn
+          key: checkpoints-${{ github.run_number }}
+
+      - name: Upload alerts as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: alerts-${{ github.run_id }}
+          path: content/
+          # Artifacts auto-delete after 90 days
+          retention-days: 90
