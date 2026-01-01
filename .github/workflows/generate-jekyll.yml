@@ -55,6 +55,8 @@ jobs:
           name: alerts-*
           path: content/
           search_artifacts: true
+          branch: main
+          workflow_conclusion: success
 
       - name: Generate Jekyll post
         run: |
