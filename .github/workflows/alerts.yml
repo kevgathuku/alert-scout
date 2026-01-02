@@ -9,6 +9,11 @@ jobs:
   run-alerts:
     runs-on: ubuntu-latest
 
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,28 +39,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lein-
 
-      - name: Restore checkpoints from previous run
-        uses: actions/cache/restore@v4
-        with:
-          path: data/checkpoints.edn
-          key: checkpoints-${{ github.run_number }}
-          restore-keys: |
-            checkpoints-
-
       # Saves alerts to content/{rule-id}/YYYY-MM-DD/*.edn
       - name: Fetch feeds and match alerts
         run: lein run
 
-      - name: Save checkpoints for next run
-        uses: actions/cache/save@v4
-        with:
-          path: data/checkpoints.edn
-          key: checkpoints-${{ github.run_number }}
+      - name: Generate timestamp for commit message
+        run: |
+          echo "ALERT_TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_ENV
 
-      - name: Upload alerts as artifact
-        uses: actions/upload-artifact@v4
+      - name: Commit and push generated alerts
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          name: alerts-${{ github.run_id }}
-          path: content/
-          # Artifacts auto-delete after 90 days
-          retention-days: 90
+          commit_message: "alerts: Add alerts from ${{ github.run_id }} at ${{ env.ALERT_TIMESTAMP }}"
+          branch: alerts-data
+          file_pattern: "data/ content/"

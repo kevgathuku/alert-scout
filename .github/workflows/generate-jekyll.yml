@@ -12,6 +12,10 @@ on:
         description: 'Date to generate post for (YYYY-MM-DD, defaults to yesterday)'
         required: false
         type: string
+      run_id:
+        description: 'Specific workflow run ID to download artifacts from (for debugging)'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -47,16 +51,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lein-
 
-      # Download all alert artifacts from the alerts workflow
-      - name: Download alert artifacts
-        uses: dawidd6/action-download-artifact@v3
+      # Checkout alerts-data branch to get all accumulated alerts
+      - name: Checkout alerts data
+        uses: actions/checkout@v4
         with:
-          workflow: alerts.yml
-          name: alerts-*
-          path: content/
-          search_artifacts: true
-          branch: main
-          workflow_conclusion: success
+          ref: alerts-data
+          path: alerts-data
+
+      - name: Copy alerts to content directory
+        run: |
+          if [ -d "alerts-data/content" ]; then
+            cp -r alerts-data/content .
+            echo "Copied alerts data:"
+            ls -laR content/
+          else
+            echo "No alerts data found"
+          fi
 
       - name: Generate Jekyll post
         run: |
@@ -86,5 +96,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add blog/_posts/*.markdown
-          git commit -m "docs: Add alert report for ${{ env.POST_DATE }}" || exit 0
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "docs: Add alert report for ${{ env.POST_DATE }}"
+            git push
+            echo "Successfully pushed to gh-pages"
+          fi
