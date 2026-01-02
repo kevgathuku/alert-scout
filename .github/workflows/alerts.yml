@@ -2,7 +2,7 @@ name: Feed alerts
 
 on:
   schedule:
-    - cron: "10 * * * *" # Every hour
+    - cron: "10 */3 * * *" # Every 3 hours
   workflow_dispatch: # Allow manual run
 
 jobs:
