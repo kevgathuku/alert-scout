@@ -9,6 +9,11 @@ jobs:
   run-alerts:
     runs-on: ubuntu-latest
 
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -47,5 +52,4 @@ jobs:
         with:
           commit_message: "alerts: Add alerts from ${{ github.run_id }} at ${{ env.ALERT_TIMESTAMP }}"
           branch: alerts-data
-          create_branch: true
-          file_pattern: 'content/*'
+          file_pattern: "data/ content/"
