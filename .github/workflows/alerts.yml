@@ -52,10 +52,41 @@ jobs:
           path: data/checkpoints.edn
           key: checkpoints-${{ github.run_number }}
 
-      - name: Upload alerts as artifact
-        uses: actions/upload-artifact@v4
+      - name: Checkout alerts-data branch
+        uses: actions/checkout@v4
         with:
-          name: alerts-${{ github.run_id }}
-          path: content/
-          # Artifacts auto-delete after 90 days
-          retention-days: 90
+          ref: alerts-data
+          path: alerts-data
+        continue-on-error: true
+
+      - name: Initialize alerts-data branch if needed
+        run: |
+          if [ ! -d "alerts-data/.git" ]; then
+            echo "Creating new alerts-data branch"
+            mkdir -p alerts-data
+            cd alerts-data
+            git init
+            git checkout -b alerts-data
+          fi
+
+      - name: Copy new alerts to alerts-data branch
+        run: |
+          if [ -d "content" ] && [ "$(ls -A content)" ]; then
+            echo "Copying new alerts to alerts-data branch"
+            mkdir -p alerts-data/content
+            cp -r content/* alerts-data/content/
+            ls -laR alerts-data/
+          else
+            echo "No new alerts to copy"
+          fi
+          
+          # Generate timestamp for commit message
+          echo "ALERT_TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_ENV
+
+      - name: Commit and push generated alerts
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "alerts: Add alerts from ${{ github.run_id }} at ${{ env.ALERT_TIMESTAMP }}"
+          repository: ./alerts-data
+          branch: alerts-data
+          create_branch: true
