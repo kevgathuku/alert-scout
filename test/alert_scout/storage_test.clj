@@ -27,18 +27,18 @@
 (deftest test-load-feeds-validation
   (testing "Valid feeds load successfully"
     (spit test-feeds-path "[{:feed-id \"hn\" :url \"https://news.ycombinator.com/rss\"}]")
-    (let [feeds (storage/load-feeds test-feeds-path)]
+    (let [feeds (storage/load-feeds! test-feeds-path)]
       (is (= 1 (count feeds)))
       (is (= "hn" (:feed-id (first feeds))))))
 
   (testing "Invalid feeds throw validation error"
     (spit test-feeds-path "[{:feed-id \"\" :url \"\"}]")
     (is (thrown-with-msg? Exception #"Invalid feeds"
-                          (storage/load-feeds test-feeds-path))))
+                          (storage/load-feeds! test-feeds-path))))
 
   (testing "Empty file returns empty vector"
     (spit test-feeds-path "[]")
-    (is (= [] (storage/load-feeds test-feeds-path)))))
+    (is (= [] (storage/load-feeds! test-feeds-path)))))
 
 (deftest test-add-feed
   (testing "Add valid feed to empty file"
@@ -76,25 +76,25 @@
   (testing "Get existing feed"
     (spit test-feeds-path "[{:feed-id \"hn\" :url \"https://news.ycombinator.com/rss\"}
                             {:feed-id \"blog\" :url \"https://blog.example.com/rss\"}]")
-    (let [feed (storage/get-feed test-feeds-path "blog")]
+    (let [feed (storage/get-feed! test-feeds-path "blog")]
       (is (= "blog" (:feed-id feed)))
       (is (= "https://blog.example.com/rss" (:url feed)))))
 
   (testing "Get non-existent feed returns nil"
     (spit test-feeds-path "[{:feed-id \"hn\" :url \"https://news.ycombinator.com/rss\"}]")
-    (is (nil? (storage/get-feed test-feeds-path "nonexistent")))))
+    (is (nil? (storage/get-feed! test-feeds-path "nonexistent")))))
 
 (deftest test-load-rules-validation
   (testing "Valid rules load successfully"
     (spit test-rules-path "[{:id \"test-rule\" :user-id \"alice\" :must [\"rails\"]}]")
-    (let [rules (storage/load-rules test-rules-path)]
+    (let [rules (storage/load-rules! test-rules-path)]
       (is (= 1 (count rules)))
       (is (= "test-rule" (:id (first rules))))))
 
   (testing "Invalid rule throws validation error"
     (spit test-rules-path "[{:id \"\" :user-id \"alice\"}]")
     (is (thrown-with-msg? Exception #"Invalid rules"
-                          (storage/load-rules test-rules-path)))))
+                          (storage/load-rules! test-rules-path)))))
 
 (deftest test-checkpoint-management
   (testing "Checkpoint operations"

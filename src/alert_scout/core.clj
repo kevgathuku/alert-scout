@@ -9,8 +9,8 @@
 ;; --- Load and validate configuration on startup ---
 ;; All config is validated against schemas. If any validation fails,
 ;; the namespace will fail to load with clear error messages.
-(def rules (storage/load-rules "data/rules.edn"))
-(def feeds (storage/load-feeds "data/feeds.edn"))
+(def rules (storage/load-rules! "data/rules.edn"))
+(def feeds (storage/load-feeds! "data/feeds.edn"))
 (storage/load-checkpoints! "data/checkpoints.edn")
 
 ;; --- Alert deduplication ---
@@ -66,8 +66,8 @@
   [feed]
   (let [{:keys [feed-id]} feed
         last-seen (storage/last-seen feed-id)
-        ;; fetch-items returns [] on error, so we can safely continue
-        items (->> (fetcher/fetch-items feed)
+        ;; fetch-items! returns [] on error, so we can safely continue
+        items (->> (fetcher/fetch-items! feed)
                    (filter #(when-let [ts (:published-at %)]
                               (or (nil? last-seen) (.after ^Date ts last-seen))))
                    (sort-by :published-at))
@@ -151,7 +151,7 @@
         all-alerts (vec (if (.exists ^java.io.File date-dir-file)
                           (mapcat (fn [edn-file]
                                     (when (.endsWith ^String (.getName ^java.io.File edn-file) ".edn")
-                                      (storage/load-edn (.getPath ^java.io.File edn-file))))
+                                      (storage/load-edn! (.getPath ^java.io.File edn-file))))
                                   (.listFiles ^java.io.File date-dir-file))
                           []))
         ;; Deduplicate in case there were multiple runs saving to the same date
