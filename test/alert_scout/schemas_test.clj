@@ -11,8 +11,7 @@
    :title "Test Title"
    :link "https://example.com"
    :published-at (Date.)
-   :content "Test content"
-   :categories ["tech"]})
+   :content "Test content"})
 
 ;; --- Excerpt Schema Tests (T006) ---
 
