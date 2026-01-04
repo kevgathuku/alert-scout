@@ -60,8 +60,9 @@
               "\n"))))))
 
 ;; --- Fetch, match, emit alerts, update checkpoint ---
-(defn process-feed
-  "Process a single feed and return its results without side effects.
+(defn process-feed!
+  "Process a single feed and return its results.
+   Side effects: fetches feed from network, prints item titles to stdout.
    If feed fetch fails (HTTP errors, rate limiting, etc), returns empty results
    but processing continues for other feeds."
   [feed]
@@ -91,7 +92,7 @@
    (run-once feeds))
   ([feeds]
    ;; Process all feeds functionally (no mutation)
-   (let [results (map process-feed feeds)
+   (let [results (map process-feed! feeds)
          ;; Aggregate results
          all-alerts (mapcat :alerts results)
          ;; Deduplicate at the earliest point - same article from multiple feeds

@@ -192,21 +192,22 @@ All configuration is stored in `data/` as EDN files:
 
 This codebase follows functional programming principles:
 
-- **Separation of concerns**: Data processing is separated from side effects
-  - `process-feed` is pure (no side effects) - it only transforms data
-  - `run-once` performs side effects (printing, checkpointing) after all data is collected
+- **Separation of concerns**: Data processing is separated from major side effects
+  - `process-feed!` fetches data and logs items, but returns structured data for aggregation
+  - `run-once` performs major side effects (alert emission, checkpointing) after all data is collected
 - **Avoid mutation**: Use `map`, `mapcat`, and `reduce` instead of `doseq` with atoms
 - **Immutable data structures**: Results are built up using lazy sequences and vector transformations
 
 When adding new features, maintain this separation:
 ```clojure
-;; Good - pure function returns data
-(defn process-feed [feed]
+;; Good - function with side effects returns data for aggregation
+(defn process-feed! [feed]
+  (println "Processing...")  ;; Side effect ok if needed for logging
   {:alerts [...] :items [...]})
 
-;; Then perform side effects separately
+;; Then perform major side effects separately
 (doseq [result results]
-  (println result))
+  (emit-alert result))
 
 ;; Bad - mixing mutation and side effects
 (doseq [feed feeds]
@@ -312,7 +313,7 @@ See `doc/bug-fixing-workflow.md` for the complete workflow, examples, and best p
 ```
 src/
   alert-scout/          # Main application logic
-    core.clj           # Orchestration (run-once, process-feed)
+    core.clj           # Orchestration (run-once, process-feed!)
     excerpts.clj       # Core excerpt extraction logic
     fetcher.clj        # RSS/Atom feed fetching
     formatter.clj      # Output formatting (terminal, markdown, EDN)
