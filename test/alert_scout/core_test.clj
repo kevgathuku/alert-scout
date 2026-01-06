@@ -120,31 +120,16 @@
       ;; Different article should be kept
       (is (some #(= "https://example.com/different" (get-in % [:item :link])) result))))
 
-  (testing "Same URL across different rules - both preserved"
-    (let [alerts [{:rule-id "rule-1"
-                   :item {:feed-id "hn"
-                          :title "Article"
-                          :link "https://example.com/article"}}
-                  {:rule-id "rule-2"
-                   :item {:feed-id "reddit"
-                          :title "Same Article"
-                          :link "https://example.com/article"}}]  ;; Same URL, different rule
-          result (core/deduplicate-alerts-by-url alerts)]
-      ;; Both should be kept (different rules)
-      (is (= 2 (count result)))
-      (is (some #(= "rule-1" (:rule-id %)) result))
-      (is (some #(= "rule-2" (:rule-id %)) result))))
-
-  (testing "Multiple duplicates of same URL - keeps first"
+  (testing "Multiple duplicates of same URL across rules - keeps first"
     (let [alerts [{:rule-id "rule-1"
                    :item {:feed-id "hn"
                           :title "First"
                           :link "https://example.com/same"}}
-                  {:rule-id "rule-1"
+                  {:rule-id "rule-2"
                    :item {:feed-id "reddit"
                           :title "Second"
                           :link "https://example.com/same"}}
-                  {:rule-id "rule-1"
+                  {:rule-id "rule-3"
                    :item {:feed-id "lobsters"
                           :title "Third"
                           :link "https://example.com/same"}}]
@@ -189,16 +174,16 @@
                           :title "Article C"
                           :link "https://example.com/c"}}]
           result (core/deduplicate-alerts-by-url alerts)]
-      ;; Should have 4 alerts: rule-1 has 2 unique, rule-2 has 2 unique
-      (is (= 4 (count result)))
+      ;; Should have 3 alerts: 3 unique urls
+      (is (= 3 (count result)))
       ;; Verify rule-1 kept first occurrence of /a
       (let [rule-1-alerts (filter #(= "rule-1" (:rule-id %)) result)]
         (is (= 2 (count rule-1-alerts)))
         (is (some #(= "hn" (get-in % [:item :feed-id])) rule-1-alerts))
         (is (not (some #(= "reddit" (get-in % [:item :feed-id])) rule-1-alerts))))
-      ;; Verify rule-2 has both alerts
+      ;; Verify rule-2 has just the non-covered alerts
       (let [rule-2-alerts (filter #(= "rule-2" (:rule-id %)) result)]
-        (is (= 2 (count rule-2-alerts))))))
+        (is (= 1 (count rule-2-alerts))))))
 
   (testing "Result is a vector"
     (let [alerts [{:rule-id "rule-1"

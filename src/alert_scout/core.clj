@@ -2,8 +2,7 @@
   (:require [alert-scout.fetcher :as fetcher]
             [alert-scout.matcher :as matcher]
             [alert-scout.storage :as storage]
-            [alert-scout.formatter :as formatter]
-            [clojure.string :as str])
+            [alert-scout.formatter :as formatter])
   (:import (java.util Date))
   (:gen-class))
 
@@ -25,16 +24,13 @@
 
   Returns vector of alerts with duplicates removed (keeps first occurrence per URL per rule-id)."
   [alerts]
-  (let [by-rule (group-by :rule-id alerts)]
-    (vec (mapcat (fn [[_rule-id rule-alerts]]
-                   (vals (reduce (fn [acc alert]
-                                   (let [url (get-in alert [:item :link])]
-                                     (if (contains? acc url)
-                                       acc
-                                       (assoc acc url alert))))
-                                 {}
-                                 rule-alerts)))
-                 by-rule))))
+  (vec (vals (reduce (fn [acc alert]
+                       (let [url (get-in alert [:item :link])]
+                         (if (contains? acc url)
+                           acc
+                           (assoc acc url alert))))
+                     {}
+                     alerts))))
 
 ;; --- Fetch, match, emit alerts, update checkpoint ---
 (defn process-feed!
