@@ -42,15 +42,20 @@ lein run
 (require '[alert-scout.core :as core] :reload-all)
 (require '[alert-scout.storage :as storage] :reload)
 
-;; Run the feed processor (uses feeds from data/feeds.edn)
-(core/run-once)
+;; Load configuration
+(def rules (storage/load-rules! "data/rules.edn"))
+(def feeds (storage/load-feeds! "data/feeds.edn"))
 
-;; Run with custom feeds
-(core/run-once [{:feed-id "test" :url "https://example.com/rss"}])
+;; Run the feed processor
+(core/process-feeds! "data/checkpoints.edn" rules feeds)
+
+;; Run with custom feeds and rules
+(def custom-feeds [{:feed-id "test" :url "https://example.com/rss"}])
+(core/process-feeds! "data/checkpoints.edn" rules custom-feeds)
 
 ;; Save alerts to file
-(def result (core/run-once))
-(core/save-alerts! (:alerts result) "reports/alerts.md" :markdown)
+(def result (core/process-feeds! "data/checkpoints.edn" rules feeds))
+(storage/save-alerts! (:alerts result) "reports/alerts.md" :markdown)
 
 ;; Validate data structures (useful during development)
 (require '[alert-scout.schemas :as schemas])
@@ -186,6 +191,13 @@ All configuration is stored in `data/` as EDN files:
 - **rules.edn**: Vector of rule maps with `:id`, `:must`, `:should`, `:must-not`, `:min-should-match`
 - **checkpoints.edn**: Map of feed-id to last-seen Date (auto-managed)
 
+**File path constants** (defined in `alert-scout.core`):
+- `default-rules-path` - "data/rules.edn"
+- `default-feeds-path` - "data/feeds.edn"
+- `default-checkpoints-path` - "data/checkpoints.edn"
+
+These private constants centralize path configuration, making it easy to modify paths in one location.
+
 ## Important Implementation Details
 
 ### Functional Programming Style
@@ -194,14 +206,14 @@ This codebase follows functional programming principles:
 
 - **Separation of concerns**: Data processing is separated from major side effects
   - `process-feed!` fetches data and logs items, but returns structured data for aggregation
-  - `run-once` performs major side effects (alert emission, checkpointing) after all data is collected
+  - `process-feeds!` performs major side effects (alert emission, checkpointing) after all data is collected
 - **Avoid mutation**: Use `map`, `mapcat`, and `reduce` instead of `doseq` with atoms
 - **Immutable data structures**: Results are built up using lazy sequences and vector transformations
 
 When adding new features, maintain this separation:
 ```clojure
 ;; Good - function with side effects returns data for aggregation
-(defn process-feed! [feed]
+(defn process-feed! [rules feed]
   (println "Processing...")  ;; Side effect ok if needed for logging
   {:alerts [...] :items [...]})
 
@@ -290,7 +302,7 @@ See `doc/malli-examples.md` for comprehensive examples and benefits.
 This project is designed for REPL-driven development:
 - Configuration is loaded at namespace initialization via `def` forms
 - To reload configuration changes, use `:reload-all` flag when requiring namespaces
-- `run-once` returns structured data `{:alerts [...] :items-processed n}` for inspection
+- `process-feeds!` returns structured data `{:alerts [...] :items-processed n}` for inspection
 
 ### Bug Fixing Workflow
 
@@ -313,7 +325,7 @@ See `doc/bug-fixing-workflow.md` for the complete workflow, examples, and best p
 ```
 src/
   alert-scout/          # Main application logic
-    core.clj           # Orchestration (run-once, process-feed!)
+    core.clj           # Orchestration (process-feeds!, process-feed!)
     excerpts.clj       # Core excerpt extraction logic
     fetcher.clj        # RSS/Atom feed fetching
     formatter.clj      # Output formatting (terminal, markdown, EDN)
