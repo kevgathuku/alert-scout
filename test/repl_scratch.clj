@@ -28,8 +28,8 @@
 
   ;; Test grouping and summary
   (group-by :rule-id test-alerts)
-  (println (core/alerts-summary test-alerts))
-  (println (core/alerts-summary test-alerts true))  ; with colors
+  (println (formatter/alerts-summary test-alerts))
+  (println (formatter/alerts-summary test-alerts true))  ; with colors
   )
 
 ;; ═══════════════════════════════════════════════════════════
@@ -38,18 +38,37 @@
 
 (comment
   ;; Run feed processing
-  (def result (core/run-once))
+  ; (def result (core/process-feeds!))
 
   ;; Inspect results
-  (:alerts result)
-  (:items-processed result)
-  (count (:alerts result))
+  ; (:alerts result)
+  ; (:items-processed result)
+  ; (count (:alerts result))
 
   ;; Look at first alert
-  (first (:alerts result))
+  ; (first (:alerts result))
 
   ;; Check alert excerpts
-  (->> result :alerts first :excerpts))
+  ; (->> result :alerts first :excerpts)
+  (def alerts [{:rule-id "rule-1"
+                :item {:feed-id "hn"
+                       :title "Article"
+                       :link "https://example.com/article"}}
+               {:rule-id "rule-2"
+                :item {:feed-id "reddit"
+                       :title "Second"
+                       :link "https://example.com/article"}}
+               {:rule-id "rule-2"
+                :item {:feed-id "reddit"
+                       :title "Same Article"
+                       :link "https://example.com/article"}}])
+  (core/deduplicate-alerts-by-url alerts)
+  (group-by :rule-id alerts); (identity result)
+  (vec (vals (reduce (fn [acc match]
+                       (let [url (get-in match [:item :link])]
+                         (if (contains? acc url)
+                           acc
+                           (assoc acc url match)))) {} alerts))))
 
 ;; ═══════════════════════════════════════════════════════════
 ;; Testing individual components
@@ -57,7 +76,7 @@
 
 (comment
   ;; Test feed fetching
-  (def feeds (storage/load-feeds "data/feeds.edn"))
+  (def feeds (storage/load-feeds! "data/feeds.edn"))
   (def last-feed (last feeds))
   (println last-feed)
   (def feed (second feeds))
@@ -73,9 +92,9 @@
   (fetcher/entry->item (first entries) (:feed-id feed))
 
   ;; Test rule matching
-  (def rules (storage/load-rules "data/rules.edn"))
-  (def first-item (first items))
-  (matcher/match-item rules first-item)
+  ; (def rules (storage/load-rules! "data/rules.edn"))
+  ; (def first-item (first items))
+  ; (matcher/match-item rules first-item)
 
   ;; Test formatting
   (formatter/format-alert (first test-alerts)))
