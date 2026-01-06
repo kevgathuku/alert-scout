@@ -11,7 +11,6 @@
 ;; All config is validated against schemas. If any validation fails,
 ;; the namespace will fail to load with clear error messages.
 (def rules (storage/load-rules! "data/rules.edn"))
-(def feeds (storage/load-feeds! "data/feeds.edn"))
 (storage/load-checkpoints! "data/checkpoints.edn")
 
 ;; --- Alert deduplication ---
@@ -88,8 +87,6 @@
    If no feeds provided, uses the feeds loaded from data/feeds.edn.
    Deduplicates alerts by URL per rule-id before returning.
    Returns a map with :alerts (deduplicated alerts) and :items-processed (total items)."
-  ([]
-   (run-once feeds))
   ([feeds]
    ;; Process all feeds functionally (no mutation)
    (let [results (map process-feed! feeds)
@@ -119,7 +116,7 @@
    Fetches feeds, matches rules, and saves alerts as individual EDN files
    in content/YYYY-MM-DD/{timestamp}.edn"
   [& args]
-  (let [{:keys [alerts]} (run-once)]
+  (let [feeds (storage/load-feeds! "data/feeds.edn") {:keys [alerts]} (run-once feeds)]
     (when (seq alerts)
       (let [now (java.util.Date.)
             date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
