@@ -85,6 +85,25 @@
      :latest-item (last items)
      :item-count (count items)}))
 
+(defn- log-feed-processing!
+  "Log feed processing details to stdout.
+   Shows feed being checked and each new item's title and link."
+  [results]
+  (doseq [{:keys [items] {:keys [feed-id url]} :feed} results]
+    (println (formatter/colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
+    ;; Log each item title and link for visibility during processing
+    (doseq [{:keys [title link]} items]
+      (println (formatter/colorize :gray (str "  • " title " — " link))))))
+
+(defn- log-summary!
+  "Log processing summary to stdout.
+   Shows alert summary, total items processed, and deduplication info."
+  [deduplicated-alerts all-alerts total-items feed-count]
+  (println (alerts-summary deduplicated-alerts true))
+  (println (formatter/colorize :gray (str "Processed " total-items " new items across " feed-count " feeds")))
+  (when (not= (count all-alerts) (count deduplicated-alerts))
+    (println (formatter/colorize :gray (str "Deduplicated " (- (count all-alerts) (count deduplicated-alerts)) " duplicate URLs\n")))))
+
 (defn process-feeds!
   "Process feeds for new items and generate alerts.
 
@@ -115,21 +134,19 @@
          deduplicated-alerts (deduplicate-alerts-by-url all-alerts)
          total-items (reduce + 0 (map :item-count results))]
 
-     ;; Perform side effects after data processing
-     (doseq [{:keys [alerts latest-item items] {:keys [feed-id url]} :feed} results]
-       (println (formatter/colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
-       ;; Log each item title and link for visibility during processing
-       (doseq [{:keys [title link]} items]
-         (println (formatter/colorize :gray (str "  • " title " — " link))))
-       (run! emit-alert alerts)
+     ;; Side effects - clearly separated
+     (log-feed-processing! results)
+
+     (doseq [{:keys [alerts]} results]
+       (run! emit-alert alerts))
+
+     (doseq [{:keys [latest-item] {:keys [feed-id]} :feed} results]
        (when latest-item
          (storage/update-checkpoint! feed-id (:published-at latest-item) checkpoint-path)))
 
-     (println (alerts-summary deduplicated-alerts true))
-     (println (formatter/colorize :gray (str "Processed " total-items " new items across " (count feeds) " feeds")))
-     (when (not= (count all-alerts) (count deduplicated-alerts))
-       (println (formatter/colorize :gray (str "Deduplicated " (- (count all-alerts) (count deduplicated-alerts)) " duplicate URLs\n"))))
+     (log-summary! deduplicated-alerts all-alerts total-items (count feeds))
 
+     ;; Return pure data
      {:alerts (vec deduplicated-alerts)
       :items-processed total-items}))
 
