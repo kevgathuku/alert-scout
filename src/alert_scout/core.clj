@@ -36,25 +36,6 @@
                                  rule-alerts)))
                  by-rule))))
 
-;; --- Alert formatting (using formatter namespace) ---
-(defn alerts-summary
-  "Create a summary of all alerts grouped by matched alerts"
-  ([alerts] (alerts-summary alerts false))
-  ([alerts colorize?]
-   (let [colorize (fn [color text] (if colorize? (formatter/colorize color text) text))]
-     (if (empty? alerts)
-       (str "\n" (colorize :gray "No new alerts found."))
-       (let [by-feed (group-by :rule-id alerts)
-             total (count alerts)]
-         (str "\n" (colorize :bold "═══ SUMMARY ═══")
-              "\n" (colorize :green (str "Total alerts: " total))
-              "\n"
-              (str/join "\n"
-                        (for [[feed-id feed-alerts] by-feed]
-                          (str "  " (colorize :cyan feed-id) ": "
-                               (colorize :yellow (str (count feed-alerts) " alerts")))))
-              "\n"))))))
-
 ;; --- Fetch, match, emit alerts, update checkpoint ---
 (defn process-feed!
   "Process a single feed and return its results.
@@ -84,7 +65,7 @@
   "Log processing summary to stdout.
    Shows alert summary, total items processed, and deduplication info."
   [deduplicated-alerts all-alerts total-items feed-count]
-  (println (alerts-summary deduplicated-alerts true))
+  (println (formatter/alerts-summary deduplicated-alerts true))
   (println (formatter/colorize :gray (str "Processed " total-items " new items across " feed-count " feeds")))
   (when (not= (count all-alerts) (count deduplicated-alerts))
     (println (formatter/colorize :gray (str "Deduplicated " (- (count all-alerts) (count deduplicated-alerts)) " duplicate URLs\n")))))
