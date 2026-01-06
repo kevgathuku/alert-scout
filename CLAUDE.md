@@ -191,6 +191,13 @@ All configuration is stored in `data/` as EDN files:
 - **rules.edn**: Vector of rule maps with `:id`, `:must`, `:should`, `:must-not`, `:min-should-match`
 - **checkpoints.edn**: Map of feed-id to last-seen Date (auto-managed)
 
+**File path constants** (defined in `alert-scout.core`):
+- `default-rules-path` - "data/rules.edn"
+- `default-feeds-path` - "data/feeds.edn"
+- `default-checkpoints-path` - "data/checkpoints.edn"
+
+These private constants centralize path configuration, making it easy to modify paths in one location.
+
 ## Important Implementation Details
 
 ### Functional Programming Style

@@ -7,8 +7,13 @@
   (:import (java.util Date))
   (:gen-class))
 
+;; --- Default file paths ---
+(def ^:private default-rules-path "data/rules.edn")
+(def ^:private default-feeds-path "data/feeds.edn")
+(def ^:private default-checkpoints-path "data/checkpoints.edn")
+
 ;; --- Load checkpoints on startup ---
-(storage/load-checkpoints! "data/checkpoints.edn")
+(storage/load-checkpoints! default-checkpoints-path)
 
 ;; --- Alert deduplication ---
 (defn deduplicate-alerts-by-url
@@ -133,9 +138,9 @@
    Fetches feeds, matches rules, and saves alerts as individual EDN files
    in content/YYYY-MM-DD/{timestamp}.edn"
   [& args]
-  (let [rules (storage/load-rules! "data/rules.edn")
-        feeds (storage/load-feeds! "data/feeds.edn")
-        {:keys [alerts]} (process-feeds! "data/checkpoints.edn" rules feeds)]
+  (let [rules (storage/load-rules! default-rules-path)
+        feeds (storage/load-feeds! default-feeds-path)
+        {:keys [alerts]} (process-feeds! default-checkpoints-path rules feeds)]
     (when (seq alerts)
       (let [now (java.util.Date.)
             date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
