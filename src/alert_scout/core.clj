@@ -7,10 +7,7 @@
   (:import (java.util Date))
   (:gen-class))
 
-;; --- Load and validate configuration on startup ---
-;; All config is validated against schemas. If any validation fails,
-;; the namespace will fail to load with clear error messages.
-(def rules (storage/load-rules! "data/rules.edn"))
+;; --- Load checkpoints on startup ---
 (storage/load-checkpoints! "data/checkpoints.edn")
 
 ;; --- Alert deduplication ---
@@ -63,8 +60,12 @@
   "Process a single feed and return its results.
    Side effects: fetches feed from network, prints item titles to stdout.
    If feed fetch fails (HTTP errors, rate limiting, etc), returns empty results
-   but processing continues for other feeds."
-  [feed]
+   but processing continues for other feeds.
+
+   Args:
+     rules - Vector of rule maps to match against items
+     feed  - Feed map with :feed-id and :url"
+  [rules feed]
   (let [{:keys [feed-id]} feed
         last-seen (storage/last-seen feed-id)
         ;; fetch-items! returns [] on error, so we can safely continue
@@ -81,12 +82,15 @@
 
 (defn run-once
   "Process feeds for new items and emit alerts.
-   If no feeds provided, uses the feeds loaded from data/feeds.edn.
    Deduplicates alerts by URL per rule-id before returning.
-   Returns a map with :alerts (deduplicated alerts) and :items-processed (total items)."
-  ([feeds]
-   ;; Process all feeds functionally (no mutation)
-   (let [results (map process-feed! feeds)
+   Returns a map with :alerts (deduplicated alerts) and :items-processed (total items).
+
+   Args:
+     rules - Vector of rule maps to match against feed items
+     feeds - Vector of feed maps to process"
+  [rules feeds]
+  ;; Process all feeds functionally (no mutation)
+  (let [results (map (partial process-feed! rules) feeds)
          ;; Aggregate results
          all-alerts (mapcat :alerts results)
          ;; Deduplicate at the earliest point - same article from multiple feeds
@@ -109,14 +113,16 @@
        (println (formatter/colorize :gray (str "Deduplicated " (- (count all-alerts) (count deduplicated-alerts)) " duplicate URLs\n"))))
 
      {:alerts (vec deduplicated-alerts)
-      :items-processed total-items})))
+      :items-processed total-items}))
 
 (defn -main
   "Main entry point for lein run.
    Fetches feeds, matches rules, and saves alerts as individual EDN files
    in content/YYYY-MM-DD/{timestamp}.edn"
   [& args]
-  (let [feeds (storage/load-feeds! "data/feeds.edn") {:keys [alerts]} (run-once feeds)]
+  (let [rules (storage/load-rules! "data/rules.edn")
+        feeds (storage/load-feeds! "data/feeds.edn")
+        {:keys [alerts]} (run-once rules feeds)]
     (when (seq alerts)
       (let [now (java.util.Date.)
             date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
