@@ -200,6 +200,10 @@ These private constants centralize path configuration, making it easy to modify 
 
 ## Important Implementation Details
 
+### Data Processing Best Practices
+
+- Perform deduplication as early as possible in the processing pipeline
+
 ### Functional Programming Style
 
 This codebase follows functional programming principles:
