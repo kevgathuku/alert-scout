@@ -1,6 +1,14 @@
 (ns alert-scout.fetcher
   (:require [remus :as remus]
-            [alert-scout.schemas :as schemas]))
+            [alert-scout.schemas :as schemas])
+  (:import [org.jsoup Jsoup]))
+
+(defn- html->text
+  "Extract plain text from HTML content using Jsoup.
+   Returns nil if input is nil."
+  [^String html]
+  (when html
+    (.text (Jsoup/parse html))))
 
 (defn- extract-http-status
   "Extract HTTP status code from Remus exception message."
@@ -37,8 +45,10 @@
   [entry feed-id]
   (let [;; Extract content value from contents or description
         ;; :contents is a sequence, so use first instead of get-in with index
-        content-value (or (some-> entry :contents first :value)
-                          (some-> entry :description :value))
+        raw-content (or (some-> entry :contents first :value)
+                        (some-> entry :description :value))
+        ;; Strip HTML tags to get plain text
+        content-value (html->text raw-content)
         ;; Extract URI or link for item-id
         item-id (or (:uri entry) (:link entry))
         ;; Build the item map
