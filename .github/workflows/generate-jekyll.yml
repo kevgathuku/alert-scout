@@ -70,8 +70,15 @@ jobs:
           echo "Copied posts to gh-pages branch"
 
       - name: Commit and push to gh-pages
+        id: auto-commit
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "docs: Add alert report for ${{ env.POST_DATE }}"
           repository: ./gh-pages-repo
           branch: gh-pages
+
+      - name: Trigger pages deploy
+        if: steps.auto-commit.outputs.changes_detected == 'true'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: deploy-pages
