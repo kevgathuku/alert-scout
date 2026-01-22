@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-18"
-date: 2026-01-18 00:00:00 +0000
+date: 2026-01-18 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,11 +21,11 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://tonsky.me/blog/syntax-highlighting/](https://tonsky.me/blog/syntax-highlighting/)
-- **Published:** 2026-01-18 01:11
+- **Published:** 2026-01-18 02:11
 
 **Matched Content:**
 
-- **[Content]** ... is “no”, then your color theme is <em>not **functional**</em>. It might give you comfort (as in—I feel...
+- **[Content]** ... is “no”, then your color theme is not **functional**. It might give you comfort (as in—I feel...
 
 
 ---
@@ -38,7 +38,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://www.anthropic.com/news/accelerating-scientific-research](https://www.anthropic.com/news/accelerating-scientific-research)
-- **Published:** 2026-01-18 03:22
+- **Published:** 2026-01-18 04:22
 
 **Matched Content:**
 
@@ -49,7 +49,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://twitter.com/neelsomani/status/2012695714187325745](https://twitter.com/neelsomani/status/2012695714187325745)
-- **Published:** 2026-01-18 03:48
+- **Published:** 2026-01-18 04:48
 
 **Matched Content:**
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-20"
-date: 2026-01-20 00:00:00 +0000
+date: 2026-01-20 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,7 +21,7 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://yyhh.org/blog/2026/01/triple-store-triple-progress-datalevin-posited-for-the-future](https://yyhh.org/blog/2026/01/triple-store-triple-progress-datalevin-posited-for-the-future)
-- **Published:** 2026-01-19 16:00
+- **Published:** 2026-01-19 17:00
 
 
 ---
@@ -34,21 +34,12 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://flexiana.com/news/2026/01/building-web-services-with-duct-1-part-2](https://flexiana.com/news/2026/01/building-web-services-with-duct-1-part-2)
-- **Published:** 2026-01-20 16:39
+- **Published:** 2026-01-20 17:39
 
 **Matched Content:**
 
 - **[Content]** ... that there is no standard framework like Django, **Ruby** On **Rails**, Spring in other languages. Clojure lets a...
-- **[Content]** ... code.</li>
-
-
-
-<li>No scaffolding (like in **Ruby** On **Rails**)</li>
-</ul>
-
-
-
-<p>This post is about <a...
+- **[Content]** ... code. No scaffolding (like in **Ruby** On **Rails**) This post is about
 
 
 ---
@@ -61,7 +52,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://www.anthropic.com/research/assistant-axis](https://www.anthropic.com/research/assistant-axis)
-- **Published:** 2026-01-19 21:25
+- **Published:** 2026-01-19 22:25
 
 **Matched Content:**
 
@@ -72,7 +63,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://github.com/jordanhubbard/nanolang](https://github.com/jordanhubbard/nanolang)
-- **Published:** 2026-01-19 21:48
+- **Published:** 2026-01-19 22:48
 
 **Matched Content:**
 
@@ -83,20 +74,19 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://github.com/willmeyers/window-art](https://github.com/willmeyers/window-art)
-- **Published:** 2026-01-19 20:11
+- **Published:** 2026-01-19 21:11
 
 **Matched Content:**
 
-- **[Content]** 
-<p>Article URL: <a...
-- **[Content]** ... URL: <a...
+- **[Content]** Article URL:
+- **[Content]** ... URL:
 
 
 ### Running Claude Code dangerously (safely)
 
 - **Feed:** hn
 - **Link:** [https://blog.emilburzo.com/2026/01/running-claude-code-dangerously-safely/](https://blog.emilburzo.com/2026/01/running-claude-code-dangerously-safely/)
-- **Published:** 2026-01-20 11:58
+- **Published:** 2026-01-20 12:58
 
 **Matched Content:**
 

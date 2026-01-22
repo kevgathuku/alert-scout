@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-13"
-date: 2026-01-13 00:00:00 +0000
+date: 2026-01-13 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,7 +21,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://claude.com/blog/cowork-research-preview](https://claude.com/blog/cowork-research-preview)
-- **Published:** 2026-01-12 19:27
+- **Published:** 2026-01-12 20:27
 
 **Matched Content:**
 
@@ -32,7 +32,7 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://yogthos.net/posts/2026-01-12-recursive-language-model.html](https://yogthos.net/posts/2026-01-12-recursive-language-model.html)
-- **Published:** 2026-01-12 00:00
+- **Published:** 2026-01-12 01:00
 
 **Matched Content:**
 

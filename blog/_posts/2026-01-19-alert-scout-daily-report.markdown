@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-19"
-date: 2026-01-19 00:00:00 +0000
+date: 2026-01-19 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,12 +21,12 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://building.nubank.com/designing-real-systems-with-immutable-data-in-clojure/](https://building.nubank.com/designing-real-systems-with-immutable-data-in-clojure/)
-- **Published:** 2026-01-19 10:00
+- **Published:** 2026-01-19 11:00
 
 **Matched Content:**
 
 - **[Title]** Designing real systems with immutable data in **Clojure**
-- **[Content]** <p>During his talk at **Clojure** South, Alex Miller, Principal Software Engineer...
+- **[Content]** During his talk at **Clojure** South, Alex Miller, Principal Software Engineer...
 - **[Content]** ... and the ever-present complexities of mutable **state** that demand layer upon layer of protection. This...
 
 
@@ -40,7 +40,7 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://news.ycombinator.com/item?id=46678550](https://news.ycombinator.com/item?id=46678550)
-- **Published:** 2026-01-19 13:05
+- **Published:** 2026-01-19 14:05
 
 **Matched Content:**
 
@@ -51,21 +51,20 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://cua.ai/docs/lume/guide/getting-started/introduction](https://cua.ai/docs/lume/guide/getting-started/introduction)
-- **Published:** 2026-01-18 17:53
+- **Published:** 2026-01-18 18:53
 
 **Matched Content:**
 
-- **[Content]** ... Server* – Native integration with **Claude** Desktop and AI coding agents. **Claude** can create, run, and execute commands in VMs directly:<p><pre><code>  # Add to **Claude** Desktop config
+- **[Content]** ... Server* – Native integration with **Claude** Desktop and AI coding agents. **Claude** can create, run, and execute commands in VMs directly:   # Add to **Claude** Desktop config
   "lume": { "command": "lume",...
-- **[Content]** ... seeing people use Lume for:
-- Running **Claude** Code in an isolated VM (your host stays clean,...
+- **[Content]** ... seeing people use Lume for: - Running **Claude** Code in an isolated VM (your host stays clean,...
 
 
 ### Show HN: Beats, a web-based drum machine
 
 - **Feed:** hn-frontpage
 - **Link:** [https://beats.lasagna.pizza](https://beats.lasagna.pizza)
-- **Published:** 2026-01-18 21:10
+- **Published:** 2026-01-18 22:10
 
 **Matched Content:**
 

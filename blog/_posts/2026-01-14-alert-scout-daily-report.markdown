@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-14"
-date: 2026-01-14 00:00:00 +0000
+date: 2026-01-14 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,25 +21,24 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://tonsky.me/blog/syntax-highlighting/](https://tonsky.me/blog/syntax-highlighting/)
-- **Published:** 2026-01-13 23:31
+- **Published:** 2026-01-14 12:29
 
 **Matched Content:**
 
-- **[Content]** ... is “no”, then your color theme is <em>not **functional**</em>. It might give you comfort (as in—I feel...
+- **[Content]** ... is “no”, then your color theme is not **functional**. It might give you comfort (as in—I feel...
 
 
 ### Senior Backend Engineer (f/m/d) at HolidayPirates GmbH
 
 - **Feed:** planet-clojure
 - **Link:** [https://jobs.braveclojure.com/company/holidaypirates/listing/senior-backend-engineer-f-m-d/QSPTpThasDDEgMPTKI7BN](https://jobs.braveclojure.com/company/holidaypirates/listing/senior-backend-engineer-f-m-d/QSPTpThasDDEgMPTKI7BN)
-- **Published:** 2026-01-14 12:03
+- **Published:** 2026-01-14 13:03
 
 **Matched Content:**
 
-- **[Content]** ... you a backend developer passionate about **Clojure** and **functional** programming?</p><p>Do you enjoy solving complex...
-- **[Content]** ... develop scalable, high-quality solutions using **Clojure** and other modern technologies.</p><h5>DUTIES ON...
-- **[Content]** ... design, and implement backend services in **Clojure**.</li>
-  <li>Build scalable APIs and services to...
+- **[Content]** ... you a backend developer passionate about **Clojure** and **functional** programming? Do you enjoy solving complex...
+- **[Content]** ... develop scalable, high-quality solutions using **Clojure** and other modern technologies. DUTIES ON...
+- **[Content]** ... design, and implement backend services in **Clojure**. Build scalable APIs and services to...
 
 
 ---
@@ -52,7 +51,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://lewiscampbell.tech/blog/260114.html](https://lewiscampbell.tech/blog/260114.html)
-- **Published:** 2026-01-13 22:57
+- **Published:** 2026-01-13 23:57
 
 **Matched Content:**
 

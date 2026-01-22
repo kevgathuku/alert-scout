@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-21"
-date: 2026-01-21 00:00:00 +0000
+date: 2026-01-21 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,13 +21,13 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://blog.datomic.com/2026/01/conj2025.html](https://blog.datomic.com/2026/01/conj2025.html)
-- **Published:** 2026-01-20 23:00
+- **Published:** 2026-01-21 00:00
 
 **Matched Content:**
 
 - **[Title]** **Datomic** at **Clojure**/Conj 2025
-- **[Content]** ... belated new year! The **Datomic** team was among the six hundred participants at <a href="https://www.2025.**clojure**-conj.org/">**Clojure**/Conj 2025</a>. Here are some...
-- **[Content]** ... Decade on **Datomic**</a> was full of lessons from Davis Shepherd and...
+- **[Content]** ... belated new year! The **Datomic** team was among the six hundred participants at **Clojure**/Conj 2025. Here are some...
+- **[Content]** ... Decade on **Datomic** was full of lessons from Davis Shepherd and...
 
 
 ---
@@ -36,22 +36,11 @@ categories: alerts
 
 **Matches:** 4
 
-### Claude Chill: Fix Claude Code's Flickering in Terminal
-
-- **Feed:** hn
-- **Link:** [https://github.com/davidbeesley/claude-chill](https://github.com/davidbeesley/claude-chill)
-- **Published:** 2026-01-20 23:26
-
-**Matched Content:**
-
-- **[Title]** **Claude** Chill: Fix **Claude** Code's Flickering in Terminal
-
-
 ### Claude's New Constitution
 
 - **Feed:** hn
 - **Link:** [https://www.anthropic.com/news/claude-new-constitution](https://www.anthropic.com/news/claude-new-constitution)
-- **Published:** 2026-01-21 16:04
+- **Published:** 2026-01-21 17:04
 
 **Matched Content:**
 
@@ -62,7 +51,7 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://github.com/borenstein/yolo-cage](https://github.com/borenstein/yolo-cage)
-- **Published:** 2026-01-21 15:13
+- **Published:** 2026-01-21 16:13
 
 **Matched Content:**
 
@@ -73,8 +62,19 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://jobswithgpt.com/company-profiles/](https://jobswithgpt.com/company-profiles/)
-- **Published:** 2026-01-21 17:52
+- **Published:** 2026-01-21 18:52
 
 **Matched Content:**
 
-- **[Content]** ... quality. Example urls: <a href="https://jobswith**gpt**.com/company-profiles/openai/" rel="nofollow">https://jobswith**gpt**.com/company-profiles/openai/</a> <a href="https://jobswith**gpt**.com/company-profiles/advanced-micro-devices-inc/" rel="nofollow">https://jobswith**gpt**.com/company-profiles/advanced-micro-devi...</a></...
+- **[Content]** ... quality. Example urls: https://jobswith**gpt**.com/company-profiles/openai/ https://jobswith**gpt**.com/company-profiles/advanced-micro-devi...
+
+
+### Claude Chill: Fix Claude Code's Flickering in Terminal
+
+- **Feed:** hn
+- **Link:** [https://github.com/davidbeesley/claude-chill](https://github.com/davidbeesley/claude-chill)
+- **Published:** 2026-01-21 00:26
+
+**Matched Content:**
+
+- **[Title]** **Claude** Chill: Fix **Claude** Code's Flickering in Terminal

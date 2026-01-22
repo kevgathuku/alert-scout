@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-08"
-date: 2026-01-08 00:00:00 +0000
+date: 2026-01-08 00:00:00 +0100
 categories: alerts
 ---
 
@@ -21,7 +21,7 @@ categories: alerts
 
 - **Feed:** planet-clojure
 - **Link:** [https://www.jvm-weekly.com/p/everything-you-might-have-missed-886](https://www.jvm-weekly.com/p/everything-you-might-have-missed-886)
-- **Published:** 2026-01-08 14:00
+- **Published:** 2026-01-08 15:00
 
 
 ---
@@ -34,7 +34,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://openai.com/index/introducing-chatgpt-health/](https://openai.com/index/introducing-chatgpt-health/)
-- **Published:** 2026-01-07 19:29
+- **Published:** 2026-01-07 20:29
 
 **Matched Content:**
 
@@ -45,7 +45,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://sakana.ai/drq/](https://sakana.ai/drq/)
-- **Published:** 2026-01-08 16:16
+- **Published:** 2026-01-08 17:16
 
 **Matched Content:**
 
