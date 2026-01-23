@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Alert Scout Daily Report - 2026-01-22"
-date: 2026-01-22 00:00:00 +0100
+date: 2026-01-22 00:00:00 +0000
 categories: alerts
 ---
 
@@ -17,28 +17,28 @@ categories: alerts
 
 **Matches:** 2
 
+### I am sorry, but everyone is getting syntax highlighting wrong
+
+- **Feed:** planet-clojure
+- **Link:** [https://tonsky.me/blog/syntax-highlighting/](https://tonsky.me/blog/syntax-highlighting/)
+- **Published:** 2026-01-21 15:34
+
+**Matched Content:**
+
+- **[Content]** ... is “no”, then your color theme is not **functional**. It might give you comfort (as in—I feel...
+
+
 ### Converting map keys to nested namespace keys
 
 - **Feed:** planet-clojure
 - **Link:** [https://clojure-diary.gitlab.io/2026/01/22/converting-map-keys-to-nested-namespace-keys.html](https://clojure-diary.gitlab.io/2026/01/22/converting-map-keys-to-nested-namespace-keys.html)
-- **Published:** 2026-01-22 05:39
+- **Published:** 2026-01-22 04:39
 
 **Matched Content:**
 
 - **[Content]** ... class="highlight"> ;;...
 - **[Content]** ... (**clojure**.string/**repl**ace
 - **[Content]** ... class="c1">;; https://dnaeon.github.io/**clojure**-map-ks-paths/
-
-
-### I am sorry, but everyone is getting syntax highlighting wrong
-
-- **Feed:** planet-clojure
-- **Link:** [https://tonsky.me/blog/syntax-highlighting/](https://tonsky.me/blog/syntax-highlighting/)
-- **Published:** 2026-01-21 16:34
-
-**Matched Content:**
-
-- **[Content]** ... is “no”, then your color theme is not **functional**. It might give you comfort (as in—I feel...
 
 
 ---
@@ -51,7 +51,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://gptzero.me/news/neurips/](https://gptzero.me/news/neurips/)
-- **Published:** 2026-01-22 16:20
+- **Published:** 2026-01-22 15:20
 
 **Matched Content:**
 
@@ -62,7 +62,7 @@ categories: alerts
 
 - **Feed:** hn
 - **Link:** [https://biblexica.com](https://biblexica.com)
-- **Published:** 2026-01-22 17:00
+- **Published:** 2026-01-22 16:00
 
 **Matched Content:**
 
@@ -73,7 +73,7 @@ categories: alerts
 
 - **Feed:** hn-frontpage
 - **Link:** [https://constellation-io.com/](https://constellation-io.com/)
-- **Published:** 2026-01-22 18:03
+- **Published:** 2026-01-22 17:03
 
 **Matched Content:**
 
