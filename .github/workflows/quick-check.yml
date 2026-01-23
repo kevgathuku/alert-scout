@@ -3,7 +3,8 @@ name: Quick Check
 # Run on every push for fast feedback
 on:
   push:
-    branches: [ '**' ]
+    branches-ignore:
+      - gh-pages
 
 jobs:
   quick-test:

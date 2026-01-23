@@ -91,6 +91,20 @@ lein uberjar
 java -jar target/uberjar/my-stuff-0.1.0-SNAPSHOT-standalone.jar
 ```
 
+### Git Commits
+
+For long git commit messages in zsh, use the temp file method to avoid heredoc parsing issues:
+
+```bash
+cat > /tmp/msg.txt << 'EOF'
+Your commit message here
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+EOF
+
+git commit -F /tmp/msg.txt
+```
+
 ### Continuous Integration
 
 The project uses GitHub Actions for CI/CD with two workflows:

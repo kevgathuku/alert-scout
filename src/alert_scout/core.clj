@@ -58,6 +58,13 @@
      :latest-item (last items)
      :item-count (count items)}))
 
+(defn- log-feed-processing!
+  "Log feed and item details to stdout."
+  [{:keys [items] {:keys [feed-id url]} :feed}]
+  (println (formatter/colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
+  (doseq [{:keys [title link]} items]
+    (println (formatter/colorize :gray (str "  • " title " — " link)))))
+
 (defn- log-summary!
   "Log processing summary to stdout.
    Shows alert summary, total items processed, and deduplication info."
@@ -97,12 +104,9 @@
         deduplicated-alerts (deduplicate-alerts-by-url all-alerts)
         total-items (reduce + 0 (map :item-count results))]
 
-     ;; Side effects - single pass over results
-    (doseq [{:keys [alerts latest-item items] {:keys [feed-id url]} :feed} results]
-      ;; Log feed and items
-      (println (formatter/colorize :gray (str "\n→ Checking feed: " feed-id " (" url ")")))
-      (doseq [{:keys [title link]} items]
-        (println (formatter/colorize :gray (str "  • " title " — " link))))
+    ;; Side effects - single pass over results
+    (doseq [{:keys [alerts latest-item] {:keys [feed-id]} :feed :as result} results]
+      (log-feed-processing! result)
 
       ;; Emit alerts
       (doseq [alert alerts]

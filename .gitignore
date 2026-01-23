@@ -47,3 +47,13 @@ Thumbs.db
 *.log
 .env
 .env.*
+
+# Claude Code local settings
+.claude/
+
+# Temporary files
+tmp/
+
+# Generated Jekyll posts (live on gh-pages branch)
+blog/_posts/*.markdown
+!blog/_posts/.gitkeep
