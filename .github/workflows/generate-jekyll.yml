@@ -21,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout main branch which contains both application code and content
-      - name: Checkout main branch
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up JDK 25
@@ -58,24 +57,12 @@ jobs:
           echo "POST_DATE=$DATE" >> $GITHUB_ENV
           lein generate-jekyll $DATE
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages-repo
-
-      - name: Copy generated post to gh-pages
-        run: |
-          cp blog/_posts/*.markdown gh-pages-repo/blog/_posts/
-          echo "Copied posts to gh-pages branch"
-
-      - name: Commit and push to gh-pages
+      - name: Commit generated post
         id: auto-commit
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "docs: Add alert report for ${{ env.POST_DATE }}"
-          repository: ./gh-pages-repo
-          branch: gh-pages
+          file_pattern: "blog/_posts/"
 
       - name: Trigger pages deploy
         if: steps.auto-commit.outputs.changes_detected == 'true'
