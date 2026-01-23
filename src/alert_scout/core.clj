@@ -132,8 +132,10 @@
         {:keys [alerts]} (process-feeds! default-checkpoints-path rules feeds)]
     (when (seq alerts)
       (let [now (java.util.Date.)
-            date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
-            time-formatter (java.text.SimpleDateFormat. "HHmmss")
+            date-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
+                             (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
+            time-formatter (doto (java.text.SimpleDateFormat. "HHmmss")
+                             (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
             date-str (.format date-formatter now)
             timestamp-str (.format time-formatter now)
             path (.getPath ^java.io.File (clojure.java.io/file "content" date-str (str timestamp-str ".edn")))]
@@ -152,10 +154,12 @@
    and generates a Jekyll markdown post in blog/_posts/{date}-alert-scout-daily-report.markdown"
   [& args]
   (let [date-str (or (first args)
-                     (.format (java.text.SimpleDateFormat. "yyyy-MM-dd")
+                     (.format (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
+                                (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
                               (java.util.Date.)))
-        ;; Parse date string back to Date for Jekyll formatter
-        date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
+        ;; Parse date string back to Date for Jekyll formatter (UTC to avoid day shift)
+        date-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
+                         (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
         date (.parse date-formatter date-str)
 
         ;; Load all alerts for the specified date

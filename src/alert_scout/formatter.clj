@@ -181,9 +181,12 @@
 
   Returns map with :filename and :content for Jekyll post."
   [alerts date]
-  (let [date-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd")
-        datetime-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss Z")
-        item-time-formatter (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm")
+  (let [date-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
+                         (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
+        datetime-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss Z")
+                             (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
+        item-time-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm")
+                              (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
         date-str (.format date-formatter date)
         datetime-str (.format datetime-formatter date)
         alert-count (count alerts)
