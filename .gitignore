@@ -54,6 +54,6 @@ Thumbs.db
 # Temporary files
 tmp/
 
-# Generated Jekyll posts (live on gh-pages branch)
-blog/_posts/*.markdown
-!blog/_posts/.gitkeep
+# Jekyll build cache
+blog/.jekyll-cache/
+
