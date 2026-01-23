@@ -22,16 +22,15 @@ title: Alert Scout Blog
 email: kevgathuku@users.noreply.github.com
 description: >- # this means to ignore newlines until "baseurl:"
   Automated feed monitoring and alert generation with Clojure
-baseurl: "/alerter-clj"  # the subpath of your site, e.g. /blog
+baseurl: "/alert-scout" # the subpath of your site, e.g. /blog
 url: "https://kevgathuku.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  kevgathuku
+github_username: kevgathuku
 
 # Build settings
 theme: minima
 permalink: /:year/:month/:day/:title/
 plugins:
   - jekyll-feed
-
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
