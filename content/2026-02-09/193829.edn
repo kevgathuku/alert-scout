@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://openai.com/index/testing-ads-in-chatgpt/", :title "Testing Ads in ChatGPT", :link "https://openai.com/index/testing-ads-in-chatgpt/", :published-at #inst "2026-02-09T19:04:16.000-00:00", :content "Comments"}, :excerpts [{:text "Testing Ads in ChatGPT", :matched-terms ["gpt"], :source :title}]}]
