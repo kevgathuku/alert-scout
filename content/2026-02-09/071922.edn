@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://harshanu.space/en/tech/ccc-vs-gcc/", :title "Claude’s C Compiler vs. GCC", :link "https://harshanu.space/en/tech/ccc-vs-gcc/", :published-at #inst "2026-02-09T04:30:38.000-00:00", :content "Comments"}, :excerpts [{:text "Claude’s C Compiler vs. GCC", :matched-terms ["claude"], :source :title}]}]
