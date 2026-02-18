@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://annas-archive.li/blog/llms-txt.html", :title "If you’re an LLM, please read this", :link "https://annas-archive.li/blog/llms-txt.html", :published-at #inst "2026-02-18T07:18:50.000-00:00", :content "Comments"}, :excerpts [{:text "If you’re an LLM, please read this", :matched-terms ["llm"], :source :title}]}]
