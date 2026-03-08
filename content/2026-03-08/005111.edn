@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://tropes.fyi/tropes-md", :title "LLM Writing Tropes.md", :link "https://tropes.fyi/tropes-md", :published-at #inst "2026-03-07T21:08:40.000-00:00", :content "Comments"}, :excerpts [{:text "LLM Writing Tropes.md", :matched-terms ["llm"], :source :title}]}]
