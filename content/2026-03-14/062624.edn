@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://www.gopeek.ai", :title "Show HN: Simple plugin to get Claude Code to listen to you", :link "https://www.gopeek.ai", :published-at #inst "2026-03-13T23:15:22.000-00:00", :content "Comments"}, :excerpts [{:text "Show HN: Simple plugin to get Claude Code to listen to you", :matched-terms ["claude"], :source :title}]}]
