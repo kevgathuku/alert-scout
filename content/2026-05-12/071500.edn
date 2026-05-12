@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://claude.com/blog/claude-platform-on-aws", :title "Claude Platform on AWS", :link "https://claude.com/blog/claude-platform-on-aws", :published-at #inst "2026-05-12T01:24:29.000-00:00", :content "Comments"}, :excerpts [{:text "Claude Platform on AWS", :matched-terms ["claude"], :source :title}]}]
