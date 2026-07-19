@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://calculus.academa.ai/", :title "LLM-Integrated Multivariable Calculus Course", :link "https://calculus.academa.ai/", :published-at #inst "2026-07-19T02:55:43.000-00:00", :content "Comments"}, :excerpts [{:text "LLM-Integrated Multivariable Calculus Course", :matched-terms ["llm"], :source :title}]}]
