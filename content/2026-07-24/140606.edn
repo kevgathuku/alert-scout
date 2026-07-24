@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://sliplane.io/blog/hetzner-inference", :title "Hetzner is working on LLM Inference", :link "https://sliplane.io/blog/hetzner-inference", :published-at #inst "2026-07-24T09:24:44.000-00:00", :content "Comments"}, :excerpts [{:text "Hetzner is working on LLM Inference", :matched-terms ["llm"], :source :title}]}]
