@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://arxiv.org/abs/2607.27197", :title "The Maxwell Conjecture Is False (GPT 5.6 Sol)", :link "https://arxiv.org/abs/2607.27197", :published-at #inst "2026-07-31T11:37:12.000-00:00", :content "Comments"}, :excerpts [{:text "The Maxwell Conjecture Is False (GPT 5.6 Sol)", :matched-terms ["gpt"], :source :title}]}]
