@@ -14,8 +14,7 @@
    :title "Test Title"
    :link "https://example.com"
    :published-at (Date.)
-   :content "Test content"
-   :categories ["tech"]})
+   :content "Test content"})
 
 ;; --- find-term-positions Tests (T021, T022) ---
 

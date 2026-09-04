@@ -11,6 +11,12 @@
 (def ^:private default-feeds-path "data/feeds.edn")
 (def ^:private default-checkpoints-path "data/checkpoints.edn")
 
+(defn- utc-formatter
+  "Create a SimpleDateFormat with UTC timezone."
+  ^java.text.SimpleDateFormat [^String pattern]
+  (doto (java.text.SimpleDateFormat. pattern)
+    (.setTimeZone (java.util.TimeZone/getTimeZone "UTC"))))
+
 ;; --- Load checkpoints on startup ---
 (storage/load-checkpoints! default-checkpoints-path)
 
@@ -132,15 +138,22 @@
         {:keys [alerts]} (process-feeds! default-checkpoints-path rules feeds)]
     (when (seq alerts)
       (let [now (java.util.Date.)
-            date-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
-                             (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
-            time-formatter (doto (java.text.SimpleDateFormat. "HHmmss")
-                             (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
-            date-str (.format date-formatter now)
-            timestamp-str (.format time-formatter now)
+            date-str (.format (utc-formatter "yyyy-MM-dd") now)
+            timestamp-str (.format (utc-formatter "HHmmss") now)
             path (.getPath ^java.io.File (clojure.java.io/file "content" date-str (str timestamp-str ".edn")))]
         (storage/save-alerts! alerts path :edn)))
     (shutdown-agents)))
+
+(defn- load-date-alerts
+  "Load all alerts from EDN files in content/{date}/ directory."
+  [date-str]
+  (let [date-dir-file (clojure.java.io/file "content" date-str)]
+    (vec (if (.exists ^java.io.File date-dir-file)
+           (mapcat (fn [edn-file]
+                     (when (.endsWith ^String (.getName ^java.io.File edn-file) ".edn")
+                       (storage/load-edn! (.getPath ^java.io.File edn-file))))
+                   (.listFiles ^java.io.File date-dir-file))
+           []))))
 
 (defn -generate-jekyll
   "Generate Jekyll blog post from all alerts saved on a specific date.
@@ -154,22 +167,12 @@
    and generates a Jekyll markdown post in blog/_posts/{date}-alert-scout-daily-report.markdown"
   [& args]
   (let [date-str (or (first args)
-                     (.format (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
-                                (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
-                              (java.util.Date.)))
+                     (.format (utc-formatter "yyyy-MM-dd") (java.util.Date.)))
         ;; Parse date string back to Date for Jekyll formatter (UTC to avoid day shift)
-        date-formatter (doto (java.text.SimpleDateFormat. "yyyy-MM-dd")
-                         (.setTimeZone (java.util.TimeZone/getTimeZone "UTC")))
-        date (.parse date-formatter date-str)
+        date (.parse (utc-formatter "yyyy-MM-dd") date-str)
 
         ;; Load all alerts for the specified date
-        date-dir-file (clojure.java.io/file "content" date-str)
-        all-alerts (vec (if (.exists ^java.io.File date-dir-file)
-                          (mapcat (fn [edn-file]
-                                    (when (.endsWith ^String (.getName ^java.io.File edn-file) ".edn")
-                                      (storage/load-edn! (.getPath ^java.io.File edn-file))))
-                                  (.listFiles ^java.io.File date-dir-file))
-                          []))
+        all-alerts (load-date-alerts date-str)
         ;; Deduplicate in case there were multiple runs saving to the same date
         deduplicated-alerts (deduplicate-alerts-by-url all-alerts)]
 

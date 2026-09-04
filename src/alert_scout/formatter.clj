@@ -21,64 +21,53 @@
 
 ;; --- Highlighting Functions ---
 
-(defn highlight-terms-terminal
-  "Highlight matched terms using ANSI colors (bold yellow).
-
-  Args:
-    text - Text to highlight terms in
-    matched-terms - Vector of terms to highlight (case-insensitive)
-
-  Returns text with ANSI color codes around matched terms."
-  [text matched-terms]
+(defn- highlight-terms
+  "Highlight matched terms using a custom wrap function.
+   Returns text with wrap-fn applied around each matched term."
+  [text matched-terms wrap-fn]
   (if (or (nil? text) (empty? matched-terms))
     text
     (reduce
      (fn [result term]
        (let [pattern (re-pattern (str "(?i)" (java.util.regex.Pattern/quote term)))]
-         (str/replace result pattern
-                      (fn [match]
-                        (colorize :bold (colorize :yellow match))))))
+         (str/replace result pattern wrap-fn)))
      text
      matched-terms)))
+
+(defn highlight-terms-terminal
+  "Highlight matched terms using ANSI colors (bold yellow)."
+  [text matched-terms]
+  (highlight-terms text matched-terms
+                   (fn [match] (colorize :bold (colorize :yellow match)))))
 
 (defn highlight-terms-markdown
-  "Highlight matched terms using markdown bold formatting.
-
-  Args:
-    text - Text to highlight terms in
-    matched-terms - Vector of terms to highlight (case-insensitive)
-
-  Returns text with **bold** markdown around matched terms."
+  "Highlight matched terms using markdown bold formatting."
   [text matched-terms]
-  (if (or (nil? text) (empty? matched-terms))
-    text
-    (reduce
-     (fn [result term]
-       (let [pattern (re-pattern (str "(?i)" (java.util.regex.Pattern/quote term)))]
-         (str/replace result pattern
-                      (fn [match]
-                        (str "**" match "**")))))
-     text
-     matched-terms)))
+  (highlight-terms text matched-terms
+                   (fn [match] (str "**" match "**"))))
 
 ;; --- Alert Formatting ---
 
-(defn- format-excerpt
-  "Format a single excerpt for terminal display.
-
-  Args:
-    excerpt - Excerpt map with :text, :matched-terms, :source
-    highlight-fn - Function to highlight matched terms
-
-  Returns formatted string with source label and highlighted text."
-  [excerpt highlight-fn]
+(defn- format-excerpt-line
+  "Format a single excerpt line.
+   format-fn takes [source-label highlighted-text] and returns formatted string."
+  [excerpt highlight-fn format-fn]
   (let [{:keys [text matched-terms source]} excerpt
         source-label (case source
-                       :title "[Title]"
-                       :content "[Content]"
-                       "[Unknown]")
+                       :title "Title"
+                       :content "Content"
+                       "Unknown")
         highlighted-text (highlight-fn text matched-terms)]
-    (str "  " (colorize :gray source-label) " " highlighted-text)))
+    (format-fn source-label highlighted-text)))
+
+(defn- terminal-excerpt-format [source-label highlighted-text]
+  (str "  " (colorize :gray (str "[" source-label "]")) " " highlighted-text))
+
+(defn- markdown-excerpt-format [source-label highlighted-text]
+  (str "- [" source-label "] " highlighted-text))
+
+(defn- jekyll-excerpt-format [source-label highlighted-text]
+  (str "- **[" source-label "]** " highlighted-text))
 
 (defn format-alert
   "Format a single alert for terminal display with excerpts.
@@ -105,7 +94,7 @@
         excerpts-section (when (and excerpts (seq excerpts))
                            (str "\n"
                                 (str/join "\n"
-                                          (map #(format-excerpt % highlight-terms-terminal) excerpts))))]
+                                          (map #(format-excerpt-line % highlight-terms-terminal terminal-excerpt-format) excerpts))))]
 
     (str header excerpts-section)))
 
@@ -160,14 +149,7 @@
                           (when (and excerpts (seq excerpts))
                             (str "\n**Matched Content:**\n"
                                  (str/join "\n"
-                                           (for [excerpt excerpts]
-                                             (let [{:keys [text matched-terms source]} excerpt
-                                                   source-label (case source
-                                                                  :title "Title"
-                                                                  :content "Content"
-                                                                  "Unknown")
-                                                   highlighted-text (highlight-terms-markdown text matched-terms)]
-                                               (str "- [" source-label "] " highlighted-text))))
+                                           (map #(format-excerpt-line % highlight-terms-markdown markdown-excerpt-format) excerpts))
                                  "\n"))))))))
 
 ;; --- Jekyll Post Formatting ---
@@ -227,14 +209,7 @@
                                                            (when (and excerpts (seq excerpts))
                                                              (str "\n**Matched Content:**\n\n"
                                                                   (str/join "\n"
-                                                                            (for [excerpt excerpts]
-                                                                              (let [{:keys [text matched-terms source]} excerpt
-                                                                                    source-label (case source
-                                                                                                   :title "Title"
-                                                                                                   :content "Content"
-                                                                                                   "Unknown")
-                                                                                    highlighted-text (highlight-terms-markdown text matched-terms)]
-                                                                                (str "- **[" source-label "]** " highlighted-text))))
+                                                                            (map #(format-excerpt-line % highlight-terms-markdown jekyll-excerpt-format) excerpts))
                                                                   "\n")))))))))
 
         content (str front-matter summary alerts-content)

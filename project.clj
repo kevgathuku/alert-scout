@@ -4,10 +4,9 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.12.2"]
-                 [remus "0.2.6"]
-                 [clj-http "3.13.1"]
-                 [metosin/malli "0.16.4"]
-                 [org.jsoup/jsoup "1.22.1"]]
+                  [remus "0.2.6"]
+                  [metosin/malli "0.16.4"]
+                  [org.jsoup/jsoup "1.22.1"]]
   :main ^:skip-aot alert-scout.core
   :target-path "target/%s"
   :plugins [[cider/cider-nrepl "0.58.0"]
