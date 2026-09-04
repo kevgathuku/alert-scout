@@ -68,3 +68,39 @@
   (testing "fetch-feed! catches exceptions and returns nil"
     (with-redefs [remus/parse-url (fn [_] (throw (Exception. "Network timeout")))]
       (is (nil? (fetcher/fetch-feed! "https://example.com/rss.xml"))))))
+
+(deftest test-entry->item-empty-link
+  (testing "entry->item returns nil when link is empty string"
+    (let [entry {:title "Test"
+                 :link ""
+                 :uri "https://example.com/item/1"}
+          result (fetcher/entry->item entry "test-feed")]
+      (is (nil? result))))
+
+  (testing "entry->item returns nil when link is nil"
+    (let [entry {:title "Test"
+                 :link nil
+                 :uri "https://example.com/item/1"}
+          result (fetcher/entry->item entry "test-feed")]
+      (is (nil? result))))
+
+  (testing "entry->item returns nil when link is missing"
+    (let [entry {:title "Test"
+                 :uri "https://example.com/item/1"}
+          result (fetcher/entry->item entry "test-feed")]
+      (is (nil? result)))))
+
+(deftest test-fetch-items-filters-invalid-entries
+  (testing "fetch-items! filters out entries with empty links"
+    (let [valid-entry {:title "Valid"
+                       :link "https://example.com/valid"
+                       :published-date #inst "2026-09-04"}
+          invalid-entry {:title "Invalid"
+                         :link ""
+                         :published-date #inst "2026-09-04"}
+          mock-feed {:response {:status 200}
+                     :feed {:entries [valid-entry invalid-entry]}}]
+      (with-redefs [fetcher/fetch-feed! (constantly mock-feed)]
+        (let [items (fetcher/fetch-items! {:feed-id "test" :url "https://example.com/rss"})]
+          (is (= 1 (count items)))
+          (is (= "Valid" (:title (first items)))))))))
