@@ -1,8 +1,6 @@
 (ns alert-scout.schemas
   (:require [malli.core :as m]
-            [malli.error :as me]
-            [malli.util :as mu])
-  (:import (java.util Date)))
+            [malli.error :as me]))
 
 ;; --- Domain Schemas ---
 

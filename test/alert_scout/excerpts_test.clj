@@ -1,5 +1,5 @@
 (ns alert-scout.excerpts-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [alert-scout.excerpts :as excerpts]
             [alert-scout.schemas :as schemas])
   (:import (java.util Date)))
@@ -238,7 +238,7 @@
       (is (<= (count result) 3))))
 
   (testing "Default max is 3 excerpts"
-    (let [text (str "API one API two API three API four API five")
+    (let [text "API one API two API three API four API five"
           terms ["api"]
           result (excerpts/generate-excerpts text terms)]
       (is (<= (count result) 3))))

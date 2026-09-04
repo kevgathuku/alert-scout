@@ -2,7 +2,8 @@
   (:require [alert-scout.fetcher :as fetcher]
             [alert-scout.matcher :as matcher]
             [alert-scout.storage :as storage]
-            [alert-scout.formatter :as formatter])
+            [alert-scout.formatter :as formatter]
+            [clojure.java.io :as io])
   (:import (java.util Date))
   (:gen-class))
 
@@ -132,7 +133,7 @@
   "Main entry point for lein run.
    Fetches feeds, matches rules, and saves alerts as individual EDN files
    in content/YYYY-MM-DD/{timestamp}.edn"
-  [& args]
+  [& _]
   (let [rules (storage/load-rules! default-rules-path)
         feeds (storage/load-feeds! default-feeds-path)
         {:keys [alerts]} (process-feeds! default-checkpoints-path rules feeds)]
@@ -140,14 +141,14 @@
       (let [now (java.util.Date.)
             date-str (.format (utc-formatter "yyyy-MM-dd") now)
             timestamp-str (.format (utc-formatter "HHmmss") now)
-            path (.getPath ^java.io.File (clojure.java.io/file "content" date-str (str timestamp-str ".edn")))]
+            path (.getPath ^java.io.File (io/file "content" date-str (str timestamp-str ".edn")))]
         (storage/save-alerts! alerts path :edn)))
     (shutdown-agents)))
 
 (defn- load-date-alerts
   "Load all alerts from EDN files in content/{date}/ directory."
   [date-str]
-  (let [date-dir-file (clojure.java.io/file "content" date-str)]
+  (let [date-dir-file (io/file "content" date-str)]
     (vec (if (.exists ^java.io.File date-dir-file)
            (mapcat (fn [edn-file]
                      (when (.endsWith ^String (.getName ^java.io.File edn-file) ".edn")

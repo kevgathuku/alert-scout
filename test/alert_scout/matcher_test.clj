@@ -1,5 +1,5 @@
 (ns alert-scout.matcher-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [alert-scout.matcher :as matcher]
             [alert-scout.schemas :as schemas])
   (:import (java.util Date)))

@@ -5,7 +5,7 @@
    - No external HTTP calls are made
    - Tests run quickly and reliably
    - Error handling logic is validated without network dependencies"
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [alert-scout.fetcher :as fetcher]
             [remus]))
 

@@ -2,7 +2,6 @@
   "REPL scratch pad for experimentation and ad-hoc testing.
   Evaluate forms in comment blocks with vim-fireplace: cpp"
   (:require [alert-scout.core :as core]
-            [alert-scout.matcher :as matcher]
             [alert-scout.fetcher :as fetcher]
             [alert-scout.formatter :as formatter]
             [alert-scout.storage :as storage]))
@@ -105,9 +104,9 @@
 
 (comment
   ;; Reload config
-  (def rules (storage/load-rules "data/rules.edn"))
-  (def feeds (storage/load-feeds "data/feeds.edn"))
+  (def rules (storage/load-rules! "data/rules.edn"))
+  (def feeds (storage/load-feeds! "data/feeds.edn"))
 
   ;; Quick run with fresh data
   (storage/load-checkpoints! "data/checkpoints.edn")
-  (core/run-once))
+  (core/process-feeds! "data/checkpoints.edn" rules feeds))

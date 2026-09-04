@@ -1,7 +1,6 @@
 (ns alert-scout.storage-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [alert-scout.storage :as storage]
-            [alert-scout.schemas :as schemas]
             [clojure.java.io :as io])
   (:import (java.util Date)))
 

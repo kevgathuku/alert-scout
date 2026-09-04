@@ -1,5 +1,5 @@
 (ns alert-scout.formatter-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [alert-scout.formatter :as formatter])
   (:import (java.util Date)))
 

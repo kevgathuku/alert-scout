@@ -1,5 +1,5 @@
 (ns alert-scout.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [alert-scout.core :as core]
             [alert-scout.storage :as storage])
   (:import (java.util Date Calendar)))
