@@ -60,3 +60,8 @@ blog/.jekyll-cache/
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
+.venv/

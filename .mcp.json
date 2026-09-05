@@ -5,6 +5,13 @@
       "args": [
         "mcp"
       ]
+    },
+    "mempalace": {
+      "command": "uv",
+      "args": [
+        "run",
+        "mempalace-mcp"
+      ]
     }
   }
 }
