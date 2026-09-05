@@ -57,3 +57,6 @@ tmp/
 # Jekyll build cache
 blog/.jekyll-cache/
 
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
