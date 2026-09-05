@@ -284,6 +284,40 @@ Checkpoint Storage (data/checkpoints.edn)
 
 See [CLAUDE.md](CLAUDE.md) for detailed architecture documentation.
 
+## MemPalace Setup
+
+This project uses [MemPalace](https://github.com/MemPalace/mempalace) for AI-assisted memory recall. MemPalace is a per-project dependency managed via `mise` and `uv`.
+
+### Prerequisites
+
+- [mise](https://mise.jdx.dev/) - tool version manager
+- [uv](https://docs.astral.sh/uv/) - Python package manager
+
+### Setup
+
+```bash
+# Install tools (Python, mempalace)
+mise install
+
+# Sync Python dependencies (creates .venv/)
+uv sync
+```
+
+### Configuration
+
+MemPalace MCP is configured in `opencode.json` and `.mcp.json`. It runs via `uv run mempalace-mcp`, using the project-local virtual environment.
+
+The palace is initialized from `mempalace.yaml` which defines wings and rooms for organizing memories by project area (src, tests, docs, etc.).
+
+### Usage
+
+Once connected, the AI agent can:
+- Search the palace for past decisions, patterns, and context
+- File new memories during sessions
+- Query the knowledge graph for entity relationships
+
+See the [MemPalace docs](https://github.com/MemPalace/mempalace) for details.
+
 ## Documentation
 
 - **[CLAUDE.md](CLAUDE.md)** - Complete architecture and development guide
