@@ -7,7 +7,7 @@ categories: alerts
 
 ## Summary
 
-**Total Alerts:** 34
+**Total Alerts:** 35
 
 **Rules Matched:** 6
 
@@ -134,7 +134,7 @@ categories: alerts
 
 ## Rule: rule-ai
 
-**Matches:** 26
+**Matches:** 27
 
 ### GPT-6 Astra in code review: Gains, privacy, and cost
 
@@ -427,3 +427,14 @@ categories: alerts
 
 - **[Content]** ... a colleague is simply pasting your messages into **Claude** Code and sending you the outputs, you can treat them like a high-latency Slack interface to **Claude** Code. It won’t be as good as a normal coding...
 - **[Content]** ... of carefully reading it, paste it into an **LLM** of your own and ask for a short list of the salient points. Second, you can sometimes simply ask an **LLM** for an entire response. In a sense, this makes...
+
+
+### Claude's new system prompt doesn't want to reproduce song lyrics
+
+- **Feed:** hn
+- **Link:** [https://simonwillison.net/2026/Sep/2/claudes-new-system-prompt/](https://simonwillison.net/2026/Sep/2/claudes-new-system-prompt/)
+- **Published:** 2026-09-05 10:32
+
+**Matched Content:**
+
+- **[Title]** **Claude**'s new system prompt doesn't want to reproduce...
