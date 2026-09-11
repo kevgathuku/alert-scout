@@ -1,0 +1,1 @@
+[{:rule-id "rule-ai", :item {:feed-id "hn", :item-id "https://github.com/kennethwolters/litelm", :title "Litelm: LiteLLM Without the Bloat", :link "https://github.com/kennethwolters/litelm", :published-at #inst "2026-09-11T18:10:20.000-00:00", :content "Comments"}, :excerpts [{:text "Litelm: LiteLLM Without the Bloat", :matched-terms ["llm"], :source :title}]}]
