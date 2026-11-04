@@ -1,16 +1,10 @@
 {
   "mcpServers": {
-    "graft": {
-      "command": "graft",
+    "mempal": {
+      "command": "mempal",
       "args": [
-        "mcp"
-      ]
-    },
-    "mempalace": {
-      "command": "uv",
-      "args": [
-        "run",
-        "mempalace-mcp"
+        "serve",
+        "--mcp"
       ]
     }
   }

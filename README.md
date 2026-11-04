@@ -284,39 +284,21 @@ Checkpoint Storage (data/checkpoints.edn)
 
 See [CLAUDE.md](CLAUDE.md) for detailed architecture documentation.
 
-## MemPalace Setup
+## Mempal Setup
 
-This project uses [MemPalace](https://github.com/MemPalace/mempalace) for AI-assisted memory recall. MemPalace is a per-project dependency managed via `mise` and `uv`.
-
-### Prerequisites
-
-- [mise](https://mise.jdx.dev/) - tool version manager
-- [uv](https://docs.astral.sh/uv/) - Python package manager
-
-### Setup
-
-```bash
-# Install tools (Python, mempalace)
-mise install
-
-# Sync Python dependencies (creates .venv/)
-uv sync
-```
+This project uses [mempal](https://github.com/MemPalace/mempal) (Rust binary, `cargo install mempal`) for AI-assisted memory recall. Memory lives in a global database keyed by wing — no per-project files needed. This repo's wing is `alert_scout` (635 drawers, verified present).
 
 ### Configuration
 
-MemPalace MCP is configured in `opencode.json` and `.mcp.json`. It runs via `uv run mempalace-mcp`, using the project-local virtual environment.
-
-The palace is initialized from `mempalace.yaml` which defines wings and rooms for organizing memories by project area (src, tests, docs, etc.).
+Mempal MCP is configured in `opencode.json` and `.mcp.json`. It runs via `mempal serve --mcp` (stdio, no auth, no venv).
 
 ### Usage
 
 Once connected, the AI agent can:
-- Search the palace for past decisions, patterns, and context
-- File new memories during sessions
-- Query the knowledge graph for entity relationships
-
-See the [MemPalace docs](https://github.com/MemPalace/mempalace) for details.
+- Search memory for past decisions, patterns, and context (`mempal_search`, wing `alert_scout`)
+- File new memories during sessions (`mempal_ingest`)
+- Query the knowledge graph for entity relationships (`mempal_kg`)
+- Check the memory protocol with `mempal_status` at session start
 
 ## Documentation
 

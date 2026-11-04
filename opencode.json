@@ -1,20 +1,20 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "graft": {
+    "mempal": {
       "type": "local",
       "command": [
-        "graft",
-        "mcp"
+        "mempal",
+        "serve",
+        "--mcp"
       ],
       "enabled": true
     },
-    "mempalace": {
+    "trail": {
       "type": "local",
       "command": [
-        "uv",
-        "run",
-        "mempalace-mcp"
+        "trail",
+        "mcp"
       ],
       "enabled": true
     }
